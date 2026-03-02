@@ -34,6 +34,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-uv-
 
+      - name: Build application
+        run: uv run python scripts/build.py
+
       - name: List dist directory
         shell: pwsh
         run: |
