@@ -188,7 +188,7 @@ class ElectronBuilder:
             "--show-memory",
             # 单文件模式优化参数
             "--windows-onefile-tempdir=unique" if self.os_name == "windows" else "",
-            "--onefile-tempdir-spec=%CACHE_DIR%\\AutoGLM-GUI\\%PROGRAM_NAME%_%UNIQUE_ID%" if self.os_name == "windows" else "",
+            "--onefile-tempdir-spec=%CACHE_DIR%\\AutoGLM-GUI\\%PROGRAM_NAME%_%UNIQUE_ID%",
             # Nuitka 4.0+ 兼容参数
             "--noinclude-default-mode=error",
             "--python-flag=no_site",
