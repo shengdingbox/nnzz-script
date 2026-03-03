@@ -181,6 +181,8 @@ class ElectronBuilder:
             f"--output-dir={output_dir}",
             "--output-filename=main.exe",
             "--follow-imports",
+            "--enable-plugin=tk-inter",
+            "--include-dll-files",
             f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
             "--assume-yes-for-downloads",
             str(entry_point),
