@@ -194,14 +194,11 @@ class ElectronBuilder:
 
         # 复制到 resources/backend
         print("\n复制后端到 resources...")
-        backend_dist = output_dir / "main.dist"
-        backend_resources = self.resources_dir / "backend"
+        backend_dist = output_dir / "dist" / "main.dist"
+        if backend_dist.exists():
+            shutil.rmtree(backend_dist)
 
-        if backend_resources.exists():
-            shutil.rmtree(backend_resources)
-
-        shutil.copytree(backend_dist, backend_resources)
-        print_success(f"后端已复制到 {backend_resources}")
+        print_success(f"后端已复制到 {backend_dist}")
 
         return True
     
