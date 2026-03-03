@@ -200,7 +200,6 @@ class ElectronBuilder:
         # 定义路径
         entry_point = self.root_dir / "main.py"
         output_dir = self.root_dir / "dist"
-        resources_backend = self.root_dir / "resources" / "backend"
         
         # 检查入口文件是否存在
         if not entry_point.exists():
@@ -224,11 +223,6 @@ class ElectronBuilder:
             if nuitka_output.exists():
                 shutil.rmtree(nuitka_output)
                 print_success("清理旧的 Nuitka 输出")
-                
-            # 清理 resources/backend
-            if resources_backend.exists():
-                shutil.rmtree(resources_backend)
-                print_success("清理旧的 resources/backend")
                 
         except Exception as e:
             print_error(f"清理旧文件失败: {str(e)}")
@@ -271,16 +265,6 @@ class ElectronBuilder:
             print_error("Nuitka 打包失败")
             return False
 
-        # 复制到 resources/backend
-        print("\n复制后端到 resources/backend...")
-        try:
-            resources_backend.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copytree(nuitka_output, resources_backend)
-            print_success(f"后端已复制到 {resources_backend}")
-        except Exception as e:
-            print_error(f"复制后端文件失败: {str(e)}")
-            return False
-
         return True
     
     def build(self) -> bool:
@@ -311,10 +295,7 @@ class ElectronBuilder:
 
 def main():
     parser = argparse.ArgumentParser(description="AutoGLM-GUI Electron 一键构建脚本")
-    # 添加跳过参数
-    parser.add_argument("--skip-frontend", action="store_true", help="跳过前端构建")
-    parser.add_argument("--skip-adb", action="store_true", help="跳过ADB工具下载")
-    parser.add_argument("--skip-backend", action="store_true", help="跳过后端打包")
+    # 添加跳过参
     args = parser.parse_args()
 
     builder = ElectronBuilder(args)
