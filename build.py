@@ -183,6 +183,7 @@ class ElectronBuilder:
             "--follow-imports",
             "--nofollow-import-to=tkinter,matplotlib,numpy",
             f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
+            "--assume-yes-for-downloads",
             str(entry_point),
         ]
 
