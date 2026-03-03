@@ -177,14 +177,21 @@ class ElectronBuilder:
 
         nuitka_cmd = [
             "uv", "run", "python", "-m", "nuitka",
-            "--onefile",  # 核心修改：单文件模式
+            "--onefile",  # 单文件模式
+            "--enable-plugin=tk-inter",  # 启用 tkinter 插件（关键）
             f"--output-dir={output_dir}",
-            "--output-filename=main.exe",
+            f"--output-filename={'main.exe' if self.os_name == 'windows' else 'main'}",
             "--follow-imports",
-            "--enable-plugin=tk-inter",
-            "--include-dll-files",
-            f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
+            "--nofollow-import-to=matplotlib,numpy",  # 仅排除不需要的模块
             "--assume-yes-for-downloads",
+            "--show-progress",
+            "--show-memory",
+            # 单文件模式优化参数
+            "--windows-onefile-tempdir=unique" if self.os_name == "windows" else "",
+            "--onefile-tempdir-spec=%CACHE_DIR%\\AutoGLM-GUI\\%PROGRAM_NAME%_%UNIQUE_ID%" if self.os_name == "windows" else "",
+            # Nuitka 4.0+ 兼容参数
+            "--noinclude-default-mode=error",
+            "--python-flag=no_site",
             str(entry_point),
         ]
 
