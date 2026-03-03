@@ -25,10 +25,13 @@ SALT = b'tafang_salt_2026_secure_888_xyz_123'
 ITERATIONS = 100000
 DATE_FORMAT = '%Y%m%d'
 DISPLAY_DATE_FORMAT = '%Y-%m-%d'
-REG_PATH = 'Software\\TaFangAssistant_Pro'
+REG_PATH = 'Software\TaFangAssistant_Pro'
 ACTIVATE_CODE_EXPIRE_MINUTES = 30
-SUPPORT_DAYS = {'3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
+SUPPORT_DAYS = {'1小时': 1/24, '3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
 CHECK_INTERVAL = 60
+
+# 全局变量
+logger = None
 
 # 工具函数
 def resource_path(relative_path):
@@ -132,7 +135,6 @@ def get_hwid():
             f"{os.environ.get('USERNAME', '')}"
             f"{os.environ.get('SYSTEMROOT', '')}"
             f"{os.environ.get('OS', '')}"
-            f"{str(os.getpid())}"
         )
         # 使用MD5哈希，然后取中间16位，再进行一次SHA1哈希
         md5_hash = hashlib.md5(info.encode()).hexdigest()
@@ -190,13 +192,14 @@ class LicenseWatchdog(threading.Thread):
             time.sleep(CHECK_INTERVAL)
             if not is_license_valid():
                 # 直接终止脚本
-                kill_process_by_name(TAFANG_EXE_NAME)
+                # 由于我们不再使用tafangmonitor.exe，只需要终止任务进程
                 kill_process_by_name(TASK_EXE_NAME)
+                logger.warning('授权已到期，脚本已终止！')
                 break
 
 def stop_all_scripts_silent():
     """静默终止所有脚本，无弹窗、无界面更新"""
-    kill_process_by_name(TAFANG_EXE_NAME)
+    # 由于我们不再使用tafangmonitor.exe，只需要终止任务进程
     kill_process_by_name(TASK_EXE_NAME)
 
 def main():
@@ -239,9 +242,9 @@ def main():
     announcement_frame.pack(fill=tk.X, pady=5)
     
     announcement_texts = [
+        '• 一机一码，激活后绑定本机',
         '欢迎使用逆战未来塔防盛鼎脚本',
         '遇到问题请前往群文件更新到最新版',
-        '点击试用就可以直接启动哦，每天可使用1小时。',
         '游戏每隔一段时间就会来一次大批量检测行为和检测历史战绩记录，请合理安排挂机时间，尽量不要一直挂机，导致禁赛。'
     ]
     
@@ -266,36 +269,9 @@ def main():
     ttk.Entry(activation_grid, textvariable=activate_code_var, width=30).grid(row=1, column=1, sticky=tk.W, pady=5)
     ttk.Button(activation_grid, text='立即激活', command=lambda: activate_code(activate_code_var.get(), hwid, root)).grid(row=1, column=2, padx=10, pady=5)
     
-    # 系统信息区域
-    info_frame = ttk.LabelFrame(main_frame, text='系统信息', padding='5')
-    info_frame.pack(fill=tk.X, pady=5)
-    
-    info_grid = ttk.Frame(info_frame)
-    info_grid.pack(fill=tk.X)
-    
-    ttk.Label(info_grid, text='当前日期：').grid(row=0, column=0, sticky=tk.W, pady=5)
-    ttk.Label(info_grid, text=today_raw).grid(row=0, column=1, sticky=tk.W, pady=5)
-    
-    # 使用说明区域
-    help_frame = ttk.LabelFrame(main_frame, text='使用说明', padding='5')
-    help_frame.pack(fill=tk.X, pady=5)
-    
-    help_texts = [
-        '• 一机一码，激活后绑定本机',
-        '• 快捷键：F2启动 / F10终止',
-        '• 到期时间格式：年-月-日 时:分:秒'
-    ]
-    
-    for text in help_texts:
-        ttk.Label(help_frame, text=text).pack(anchor=tk.W, pady=2)
-    
     # 功能按钮区域 - 放在最下面
     button_frame = ttk.Frame(main_frame)
     button_frame.pack(fill=tk.X, pady=5)
-    
-    # 添加试用按钮
-    trial_button = ttk.Button(button_frame, text='试用 (每天2小时)', command=lambda: start_script(True))
-    trial_button.pack(side=tk.LEFT, padx=5)
     
     # 启动按钮
     start_button = ttk.Button(button_frame, text='启动塔防脚本 (F2)', command=lambda: start_script(license_valid))
@@ -306,6 +282,48 @@ def main():
     stop_button = ttk.Button(button_frame, text='终止所有脚本 (F10)', command=lambda: stop_script(license_valid))
     stop_button.pack(side=tk.LEFT, padx=5)
     stop_button.state(['disabled'] if not license_valid else [])
+    
+    # 日志输出区域
+    log_frame = ttk.LabelFrame(main_frame, text='运行日志', padding='5')
+    log_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+    
+    # 创建文本框用于显示日志
+    log_text = tk.Text(log_frame, height=10, wrap=tk.WORD)
+    log_text.pack(fill=tk.BOTH, expand=True)
+    
+    # 添加滚动条
+    scrollbar = ttk.Scrollbar(log_text, orient=tk.VERTICAL, command=log_text.yview)
+    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+    log_text.config(yscrollcommand=scrollbar.set)
+    
+    # 定义日志类
+    class Logger:
+        def __init__(self, text_widget):
+            self.text_widget = text_widget
+        
+        def log(self, message):
+            """输出日志信息"""
+            from datetime import datetime
+            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            log_message = f"[{timestamp}] {message}\n"
+            self.text_widget.insert(tk.END, log_message)
+            self.text_widget.see(tk.END)  # 自动滚动到最新内容
+        
+        def info(self, message):
+            """输出信息日志"""
+            self.log(f"INFO: {message}")
+        
+        def error(self, message):
+            """输出错误日志"""
+            self.log(f"ERROR: {message}")
+        
+        def warning(self, message):
+            """输出警告日志"""
+            self.log(f"WARNING: {message}")
+    
+    # 创建日志实例
+    global logger
+    logger = Logger(log_text)
     
     # 启动授权监控线程
     if license_valid:
@@ -342,6 +360,7 @@ def copy_hwid(hwid):
 def activate_code(input_code, hwid, root):
     input_code = input_code.strip().upper()
     if len(input_code) != 16:
+        logger.warning('激活码必须是16位字符！')
         messagebox.showinfo('提示', '激活码必须是16位字符！')
         return
     
@@ -349,37 +368,47 @@ def activate_code(input_code, hwid, root):
     if valid_days:
         save_license(hwid, input_code, valid_days)
         days_name = [k for k, v in SUPPORT_DAYS.items() if v == valid_days][0]
+        logger.info(f'激活成功：已激活{days_name}权限！')
         messagebox.showinfo('激活成功', '已激活' + days_name + '权限！程序将重启生效')
         # 重启程序
         root.destroy()
         os.startfile(sys.argv[0])
     else:
+        logger.error('激活失败：激活码无效、已过期（30分钟内有效）或不匹配本机！')
         messagebox.showinfo('激活失败', '激活码无效、已过期（30分钟内有效）或不匹配本机！')
 
 def start_script(license_valid):
     if license_valid:
         try:
-            tafang_exe_path = resource_path(TAFANG_EXE_NAME)
-            if not os.path.exists(tafang_exe_path):
-                messagebox.showinfo('错误', '核心文件缺失，请重新获取软件！')
-                return
-            else:
-                subprocess.Popen([tafang_exe_path], creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-                messagebox.showinfo('成功', '塔防脚本启动成功！')
+            # 导入tafangrunning模块并调用run_game_cycle()函数
+            import tafangrunning
+            # 设置logger实例
+            tafangrunning.set_logger(logger)
+            # 在新线程中运行，避免阻塞主界面
+            import threading
+            t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
+            t.start()
+            logger.info('塔防脚本启动成功！')
+            messagebox.showinfo('成功', '塔防脚本启动成功！')
         except Exception as e:
+            logger.error(f'启动失败：{str(e)}')
             messagebox.showinfo('启动失败', '错误信息：\n' + str(e))
     else:
+        logger.warning('未激活/授权已到期，无法启动脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
 
 def stop_script(license_valid):
     if license_valid:
-        monitor_killed = kill_process_by_name(TAFANG_EXE_NAME)
+        # 由于我们不再使用tafangmonitor.exe，只需要检查任务进程
         task_killed = kill_process_by_name(TASK_EXE_NAME)
-        if monitor_killed or task_killed:
+        if task_killed:
+            logger.info('已终止所有运行的脚本！')
             messagebox.showinfo('成功', '已终止所有运行的脚本！')
         else:
+            logger.info('未检测到运行中的脚本！')
             messagebox.showinfo('提示', '未检测到运行中的脚本！')
     else:
+        logger.warning('未激活/授权已到期，无需终止脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无需终止脚本！')
 
 if __name__ == '__main__':
