@@ -17,6 +17,14 @@ import msvcrt
 import win32api
 import win32con
 import traceback
+
+# 全局logger变量
+logger = None
+
+def set_logger(log_instance):
+    """设置logger实例"""
+    global logger
+    logger = log_instance
 def resource_path(relative_path):
     """获取资源的绝对路径，适用于开发环境和 PyInstaller 打包后的环境"""
     try:
@@ -34,11 +42,17 @@ def simulate_mouse_wheel(x, y, scroll_amount=120):
     win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, x, y, scroll_amount, 0)
 def repeat_scroll(x, y, scroll_amount=(-120), times=10):
     win32api.SetCursorPos((x, y))
-    print(f'开始在({x}, {y})位置滚动{times}次...')
+    if logger:
+        logger.info(f'开始在({x}, {y})位置滚动{times}次...')
+    else:
+        print(f'开始在({x}, {y})位置滚动{times}次...')
     for i in range(times):
         simulate_mouse_wheel(x, y, scroll_amount)
         time.sleep(0.1)
-    print('滚动完成！')
+    if logger:
+        logger.info('滚动完成！')
+    else:
+        print('滚动完成！')
 # 定义函数：key=要按的键，press_duration=按键持续时间（默认0.05秒）
 def press_key(key, press_duration=0.05):
     # 注释：无关代码（应该是静态分析工具生成的提示，无实际作用）
@@ -81,7 +95,10 @@ def press_key(key, press_duration=0.05):
     win32api.keybd_event(vk_code, 0, 0, 0)  # 模拟【按下】按键
     time.sleep(press_duration)  # 按住指定时长
     win32api.keybd_event(vk_code, 0, win32con.KEYEVENTF_KEYUP, 0)  # 模拟【松开】按键
-    print(f'已按下: {key}')
+    if logger:
+        logger.info(f'已按下: {key}')
+    else:
+        print(f'已按下: {key}')
 # ===================== 修复后的找图函数 =====================
 def find_image(template_path, threshold=0.8):
     """
@@ -99,7 +116,10 @@ def find_image(template_path, threshold=0.8):
                 # 缓存不存在，读取图片并缓存
                 template = cv2.imread(template_path, 0)
                 if template is None:
-                    print(f'错误：无法读取图片 -> {template_path}')
+                    if logger:
+                        logger.error(f'错误：无法读取图片 -> {template_path}')
+                    else:
+                        print(f'错误：无法读取图片 -> {template_path}')
                     return None
                 h, w = template.shape
                 _template_cache[template_path] = (template, h, w)
@@ -121,11 +141,17 @@ def find_image(template_path, threshold=0.8):
             y = max_loc[1] + h // 2
             return (x, y, max_val)
         else:
-            print(f'未找到目标图片 | 最高相似度: {max_val:.3f}')
+            if logger:
+                logger.info(f'未找到目标图片 | 最高相似度: {max_val:.3f}')
+            else:
+                print(f'未找到目标图片 | 最高相似度: {max_val:.3f}')
             return None
 
     except Exception as e:
-        print(f'找图失败，错误信息: {str(e)}')
+        if logger:
+            logger.error(f'找图失败，错误信息: {str(e)}')
+        else:
+            print(f'找图失败，错误信息: {str(e)}')
         return None
 def click_at(x, y, button='left', delay=0.1):
     win32api.SetCursorPos((x, y))
@@ -144,14 +170,23 @@ def click_at(x, y, button='left', delay=0.1):
     win32api.mouse_event(up_event, 0, 0)
     time.sleep(delay)
     win32api.SetCursorPos((410, 310))
-    print(f'已在坐标 ({x}, {y}) 点击{button}键')
+    if logger:
+        logger.info(f'已在坐标 ({x}, {y}) 点击{button}键')
+    else:
+        print(f'已在坐标 ({x}, {y}) 点击{button}键')
 def wait_for_image(template_path, threshold=0.75, check_interval=1.0, Afterrecognition=0.0):
-    print(f'等待图片出现: {template_path}')
+    if logger:
+        logger.info(f'等待图片出现: {template_path}')
+    else:
+        print(f'等待图片出现: {template_path}')
     while True:
         result = find_image(template_path, threshold)
         if result is not None:
             x, y, similarity = result
-            print(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
+            if logger:
+                logger.info(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
+            else:
+                print(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
             time.sleep(Afterrecognition)
             return result
         else:
@@ -186,9 +221,15 @@ def wave_monitor():
         time.sleep(CHECK_INTERVAL)
         with wave_lock:
             currentnow = wave_counter
-            print(f'波次监控：当前计数器={currentnow}，上次记录={last_wave_counter}')
+            if logger:
+                logger.info(f'波次监控：当前计数器={currentnow}，上次记录={last_wave_counter}')
+            else:
+                print(f'波次监控：当前计数器={currentnow}，上次记录={last_wave_counter}')
             if currentnow == last_wave_counter:
-                print('检测到波次卡死，准备重启游戏...')
+                if logger:
+                    logger.warning('检测到波次卡死，准备重启游戏...')
+                else:
+                    print('检测到波次卡死，准备重启游戏...')
                 restart_game()
                 return
             else:
@@ -198,7 +239,10 @@ def restart_game():
     for _ in range(2):
         result = find_image(resource_path('autophoto/shibai.png'), 0.7)
         if result:
-            print('识别到失败')
+            if logger:
+                logger.info('识别到失败')
+            else:
+                print('识别到失败')
             for i in range(10):
                 press_key('SPACE')
                 time.sleep(0.5)
@@ -206,59 +250,95 @@ def restart_game():
             os._exit(1)
         result = find_image(resource_path('autophoto/lianyukaishi.png'), 0.7)
         if result:
-            print('识别到炼狱开始')
+            if logger:
+                logger.info('识别到炼狱开始')
+            else:
+                print('识别到炼狱开始')
             click_at(1454, 220, button='left')
             os._exit(1)
         result = find_image(resource_path('autophoto/tiaozhanmoshi.png'), 0.7)
         if result:
-            print('识别到挑战模式')
+            if logger:
+                logger.info('识别到挑战模式')
+            else:
+                print('识别到挑战模式')
             os._exit(1)
         result = find_image(resource_path('autophoto/zhujiemian.png'), 0.7)
         if result:
-            print('识别到主界面')
+            if logger:
+                logger.info('识别到主界面')
+            else:
+                print('识别到主界面')
             click_at(1675, 930, button='left')
             time.sleep(3)
             click_at(521, 502, button='left')
             time.sleep(3)
             result = find_image(resource_path('autophoto/lianyukaishi.png'), 0.7)
             if result:
-                print('识别到炼狱开始')
+                if logger:
+                    logger.info('识别到炼狱开始')
+                else:
+                    print('识别到炼狱开始')
                 click_at(1454, 220, button='left')
                 os._exit(1)
             result = find_image(resource_path('autophoto/tiaozhanmoshi.png'), 0.7)
             if result:
-                print('识别到挑战模式')
+                if logger:
+                    logger.info('识别到挑战模式')
+                else:
+                    print('识别到挑战模式')
                 os._exit(1)
             os._exit(1)
         time.sleep(10)
-        print('自检未检测到')
+        if logger:
+            logger.info('自检未检测到')
+        else:
+            print('自检未检测到')
 def traverse():
     result = find_image(resource_path('autophoto/lianyukaishi.png'), 0.7)
     if result:
-        print('识别到炼狱开始')
+        if logger:
+            logger.info('识别到炼狱开始')
+        else:
+            print('识别到炼狱开始')
         return True
     else:
         result = find_image(resource_path('autophoto/tiaozhanmoshi.png'), 0.7)
         if result:
-            print('识别到挑战模式')
+            if logger:
+                logger.info('识别到挑战模式')
+            else:
+                print('识别到挑战模式')
             click_at(1454, 220, button='left')
         result = find_image(resource_path('autophoto/zhujiemian.png'), 0.7)
         if result:
-            print('识别到主界面')
+            if logger:
+                logger.info('识别到主界面')
+            else:
+                print('识别到主界面')
             click_at(1675, 930, button='left')
             time.sleep(3)
             click_at(521, 502, button='left')
             time.sleep(3)
             result = find_image(resource_path('autophoto/lianyukaishi.png'), 0.7)
             if result:
-                print('识别到炼狱开始')
+                if logger:
+                    logger.info('识别到炼狱开始')
+                else:
+                    print('识别到炼狱开始')
                 click_at(1688, 954, button='left')
             result = find_image(resource_path('autophoto/tiaozhanmoshi.png'), 0.7)
             if result:
-                print('识别到挑战模式')
+                if logger:
+                    logger.info('识别到挑战模式')
+                else:
+                    print('识别到挑战模式')
         result = find_image(resource_path('autophoto/shibai.png'), 0.7)
         if result:
-            print('识别到失败')
+            if logger:
+                logger.info('识别到失败')
+            else:
+                print('识别到失败')
             for i in range(10):
                 press_key('SPACE')
                 time.sleep(0.5)
@@ -952,7 +1032,10 @@ def run_game_cycle():
         while True:
             # 调用traverse函数检测画面中是否出现"炼狱"相关元素
             if traverse():
-                print('识别到炼狱开始，执行操作后退出循环！')
+                if logger:
+                    logger.info('识别到炼狱开始，执行操作后退出循环！')
+                else:
+                    print('识别到炼狱开始，执行操作后退出循环！')
                 # 识别到目标，退出当前检测循环，执行后续操作
                 break
             else:
@@ -1000,7 +1083,10 @@ def run_game_cycle():
             press_key('SPACE', press_duration=0.1)
             # 检测是否再次出现"炼狱"标识
             if traverse():
-                print('识别到炼狱开始，执行操作后退出循环！')
+                if logger:
+                    logger.info('识别到炼狱开始，执行操作后退出循环！')
+                else:
+                    print('识别到炼狱开始，执行操作后退出循环！')
                 break
             else:
                 time.sleep(0.5)  # 未识别到则等待0.5秒
