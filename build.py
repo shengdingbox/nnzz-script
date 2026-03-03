@@ -186,12 +186,6 @@ class ElectronBuilder:
             "--assume-yes-for-downloads",
             "--show-progress",
             "--show-memory",
-            # 单文件模式优化参数
-            "--windows-onefile-tempdir=unique",
-            "--onefile-tempdir-spec=%CACHE_DIR%\\AutoGLM-GUI\\%PROGRAM_NAME%_%UNIQUE_ID%",
-            # Nuitka 4.0+ 兼容参数
-            "--noinclude-default-mode=error",
-            "--python-flag=no_site",
             str(entry_point),
         ]
 
