@@ -180,7 +180,7 @@ class ElectronBuilder:
             "--onefile",  # 单文件模式
             "--enable-plugin=tk-inter",  # 启用 tkinter 插件（关键）
             f"--output-dir={output_dir}",
-            f"--output-filename={'main.exe' if self.os_name == 'windows' else 'main'}",
+            f"--output-filename=main.exe",
             "--follow-imports",
             "--nofollow-import-to=matplotlib,numpy",  # 仅排除不需要的模块
             "--assume-yes-for-downloads",
