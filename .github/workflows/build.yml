@@ -1,51 +1,134 @@
-name: Build Electron App (Windows Manual)
+name: Build Python Backend (Windows Manual)
 
 on:
   workflow_dispatch:
+    inputs:
+      skip_backend:
+        description: '是否跳过后端打包 (true/false)'
+        required: false
+        default: 'false'
 
 jobs:
-  build-windows:
-    name: Build for Windows
+  build-windows-python:
+    name: Build Python Backend (Windows)
     runs-on: windows-latest
-
+    timeout-minutes: 30  # 精简后缩短超时时间
     env:
       PYTHONIOENCODING: utf-8
+      UV_CACHE_DIR: ${{ github.workspace }}\.uv-cache  # 自定义uv缓存目录
+      NUITKA_CACHE_DIR: ${{ github.workspace }}\.nuitka-cache
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 1  # 只拉取最新提交，加快速度
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+          cache: 'pip'  # 缓存pip依赖
 
-      - name: Install uv
+      - name: Install uv package manager
         shell: pwsh
         run: |
+          # 安装uv并添加到PATH
           irm https://astral.sh/uv/install.ps1 | iex
-          echo "$env:USERPROFILE\.cargo\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          $uvPath = "$env:USERPROFILE\.cargo\bin"
+          echo "$uvPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+          
+          # 验证uv安装
+          uv --version
+          if ($LASTEXITCODE -ne 0) {
+              Write-Error "uv安装失败"
+              exit 1
+          }
 
-      - name: Cache uv
+      - name: Cache uv dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.cache/uv
-          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock') }}
+          path: |
+            ${{ env.UV_CACHE_DIR }}
+            ~/.cache/uv
+          key: ${{ runner.os }}-uv-${{ hashFiles('**/uv.lock', '**/pyproject.toml') }}
           restore-keys: |
             ${{ runner.os }}-uv-
 
-      - name: Build application
-        run: uv run python build.py
-
-      - name: List dist directory
+      - name: Prepare build arguments
+        id: build-args
         shell: pwsh
         run: |
-          Get-ChildItem -Path dist -Recurse -File |
-          Select-Object FullName, @{Name="Size(MB)";Expression={[math]::Round($_.Length/1MB, 2)}}
+          # 构建命令参数（仅保留后端相关）
+          $args = @()
+          if ('${{ github.event.inputs.skip_backend }}' -eq 'true') {
+              $args += '--skip-backend'
+          }
+          
+          # 输出参数供后续步骤使用
+          $argString = $args -join ' '
+          echo "args=$argString" | Out-File -FilePath $env:GITHUB_OUTPUT -Encoding utf8 -Append
+          Write-Host "Build arguments: $argString"
 
-      - name: Upload Windows build (temporary)
+      - name: Build Python backend
+        shell: pwsh
+        run: |
+          # 切换到项目根目录
+          cd ${{ github.workspace }}
+          
+          # 显示环境信息
+          Write-Host "=== 环境信息 ==="
+          python --version
+          uv --version
+          
+          # 执行Python后端构建脚本
+          Write-Host "=== 开始构建Python后端 ==="
+          uv run python scripts/build_electron.py ${{ steps.build-args.outputs.args }}
+          
+          if ($LASTEXITCODE -ne 0) {
+              Write-Error "后端构建失败"
+              exit 1
+          }
+
+      - name: List build output
+        shell: pwsh
+        if: always()  # 即使构建失败也执行，方便调试
+        run: |
+          # 详细列出dist目录内容
+          Write-Host "=== 构建产物列表 ==="
+          if (Test-Path dist) {
+              Get-ChildItem -Path dist -Recurse | Format-Table FullName, Length, LastWriteTime
+              # 计算总大小
+              $totalSize = (Get-ChildItem -Path dist -Recurse -File | Measure-Object -Property Length -Sum).Sum
+              Write-Host "Total dist size: $([math]::Round($totalSize/1MB, 2)) MB"
+          } else {
+              Write-Host "dist目录不存在"
+          }
+
+      - name: Upload build logs (on failure)
         uses: actions/upload-artifact@v4
+        if: failure()  # 仅在构建失败时上传日志
         with:
-          name: windows-build
-          path: dist
-          retention-days: 1
+          name: windows-python-build-logs-${{ github.run_id }}
+          path: |
+            *.log
+            **/*.log
+            ${{ env.NUITKA_CACHE_DIR }}/*.log
+          retention-days: 7
+
+      - name: Upload Python backend artifact
+        uses: actions/upload-artifact@v4
+        if: success()  # 仅在构建成功时上传产物
+        with:
+          name: windows-python-backend-${{ github.run_id }}
+          path: dist/**/*
+          retention-days: 7  # 产物保留7天
+          compression-level: 6  # 压缩产物
+
+      - name: Cleanup cache
+        if: always()
+        shell: pwsh
+        run: |
+          # 清理缓存目录，释放空间
+          Remove-Item -Path ${{ env.UV_CACHE_DIR }} -Recurse -Force -ErrorAction SilentlyContinue
+          Remove-Item -Path ${{ env.NUITKA_CACHE_DIR }} -Recurse -Force -ErrorAction SilentlyContinue

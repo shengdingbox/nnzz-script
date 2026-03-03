@@ -33,7 +33,6 @@ if sys.platform == "win32":
 
 class Color:
     """终端颜色"""
-
     RESET = "\033[0m"
     BOLD = "\033[1m"
     RED = "\033[91m"
@@ -41,6 +40,17 @@ class Color:
     YELLOW = "\033[93m"
     BLUE = "\033[94m"
     CYAN = "\033[96m"
+
+    # Windows cmd 不支持 ANSI 转义码时禁用颜色
+    @classmethod
+    def disable_colors(cls):
+        cls.RESET = ""
+        cls.BOLD = ""
+        cls.RED = ""
+        cls.GREEN = ""
+        cls.YELLOW = ""
+        cls.BLUE = ""
+        cls.CYAN = ""
 
 
 def print_step(step: str, total: int, current: int):
@@ -76,7 +86,7 @@ def run_command(
 
     try:
         # Windows 下 pnpm/npm 等命令需要通过 shell 执行
-        use_shell = sys.platform == "win32" and cmd[0] in ["pnpm", "npm"]
+        use_shell = sys.platform == "win32" and cmd[0] in ["pnpm", "npm", "uv"]
 
         result = subprocess.run(
             cmd,
@@ -89,10 +99,13 @@ def run_command(
         )
         return result.returncode == 0
     except subprocess.CalledProcessError as e:
-        print_error(f"命令执行失败: {e}")
+        print_error(f"命令执行失败: {e.stderr if e.stderr else str(e)}")
         return False
     except FileNotFoundError:
         print_error(f"命令未找到: {cmd[0]}")
+        return False
+    except Exception as e:
+        print_error(f"执行命令时发生异常: {str(e)}")
         return False
 
 
@@ -105,9 +118,10 @@ def check_command(cmd: str) -> bool:
             capture_output=True,
             check=True,
             shell=(sys.platform == "win32"),
+            timeout=10,
         )
         return True
-    except (subprocess.CalledProcessError, FileNotFoundError):
+    except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
         return False
 
 
@@ -118,22 +132,37 @@ def get_backend_version(root_dir: Path) -> str:
         with pyproject_path.open("rb") as file:
             data = tomllib.load(file)
         return str(data.get("project", {}).get("version") or "unknown")
-    except Exception:
+    except Exception as e:
+        print_warning(f"读取版本号失败: {str(e)}")
         return "unknown"
 
 
 class ElectronBuilder:
     def __init__(self, args):
         self.args = args
-        self.root_dir = Path(__file__).parent
+        # 修正：脚本在 scripts 目录下，项目根目录需要向上一级
+        self.script_dir = Path(__file__).resolve().parent
+        self.root_dir = self.script_dir.parent
+        self.os_name = platform.system().lower()
+        
+        # Windows 禁用 ANSI 颜色
+        if self.os_name == "windows":
+            Color.disable_colors()
 
     def check_environment(self) -> bool:
         """检查环境依赖"""
         print_step("检查环境依赖", 7, 1)
 
         required_tools = {
-            "uv": "Python 包管理器"
+            "uv": "Python 包管理器",
+            "python": "Python 解释器"
         }
+
+        # 根据系统补充必要工具
+        if self.os_name == "windows":
+            required_tools["where"] = "Windows 路径查找工具"
+        else:
+            required_tools["which"] = "Unix 路径查找工具"
 
         missing_tools = []
         for tool, description in required_tools.items():
@@ -147,7 +176,10 @@ class ElectronBuilder:
             print_error(f"\n缺少必需工具: {', '.join(missing_tools)}")
             print("\n安装指南:")
             if "uv" in missing_tools:
-                print("  uv: curl -LsSf https://astral.sh/uv/install.sh | sh")
+                if self.os_name == "windows":
+                    print("  uv: powershell -c \"irm https://astral.sh/uv/install.ps1 | iex\"")
+                else:
+                    print("  uv: curl -LsSf https://astral.sh/uv/install.sh | sh")
             return False
 
         return True
@@ -159,72 +191,130 @@ class ElectronBuilder:
     
     def build_backend(self) -> bool:
         """打包 Python 后端"""
+        if self.args.skip_backend:
+            print_warning("跳过后端打包")
+            return True
+            
         print_step("打包 Python 后端", 7, 5)
 
-        # 清理旧的构建输出
-        pyinstaller_dist = self.root_dir / "dist" / "main"
-        pyinstaller_build = self.root_dir / "build" / "main"
-        if pyinstaller_dist.exists():
-            shutil.rmtree(pyinstaller_dist)
-            print_success("清理旧的 PyInstaller dist 输出")
-        if pyinstaller_build.exists():
-            shutil.rmtree(pyinstaller_build)
-            print_success("清理旧的 PyInstaller build 输出")
-
-        # 准备 Nuitka 命令参数
+        # 定义路径
         entry_point = self.root_dir / "main.py"
         output_dir = self.root_dir / "dist"
+        resources_backend = self.root_dir / "resources" / "backend"
         
+        # 检查入口文件是否存在
+        if not entry_point.exists():
+            print_error(f"入口文件不存在: {entry_point}")
+            return False
+
+        # 清理旧的构建输出
+        try:
+            # 清理 PyInstaller 残留
+            pyinstaller_dist = self.root_dir / "dist" / "main"
+            pyinstaller_build = self.root_dir / "build" / "main"
+            if pyinstaller_dist.exists():
+                shutil.rmtree(pyinstaller_dist)
+                print_success("清理旧的 PyInstaller dist 输出")
+            if pyinstaller_build.exists():
+                shutil.rmtree(pyinstaller_build)
+                print_success("清理旧的 PyInstaller build 输出")
+            
+            # 清理 Nuitka 输出
+            nuitka_output = output_dir / "main.dist"
+            if nuitka_output.exists():
+                shutil.rmtree(nuitka_output)
+                print_success("清理旧的 Nuitka 输出")
+                
+            # 清理 resources/backend
+            if resources_backend.exists():
+                shutil.rmtree(resources_backend)
+                print_success("清理旧的 resources/backend")
+                
+        except Exception as e:
+            print_error(f"清理旧文件失败: {str(e)}")
+            return False
+
+        # 准备 Nuitka 命令参数（跨平台兼容）
         nuitka_cmd = [
             "uv", "run", "python", "-m", "nuitka",
             "--standalone",
             f"--output-dir={output_dir}",
-            "--output-filename=main.exe",
             "--follow-imports",
             "--nofollow-import-to=tkinter,matplotlib,numpy",
-            f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
             "--assume-yes-for-downloads",
+            "--show-progress",
+            "--show-memory",
             str(entry_point),
         ]
 
+        # 根据系统设置输出文件名
+        if self.os_name == "windows":
+            nuitka_cmd.insert(nuitka_cmd.index("--output-dir=") + 1, "--output-filename=main.exe")
+            # Windows 特有的参数
+            nuitka_cmd.extend([
+                "--windows-disable-console",  # 禁用控制台窗口
+                "--windows-icon-from-ico=" + str(self.root_dir / "assets" / "icon.ico")
+            ])
+        else:
+            nuitka_cmd.insert(nuitka_cmd.index("--output-dir=") + 1, "--output-filename=main")
+
+        # 添加数据文件（检查文件是否存在）
+        tafangmonitor_exe = self.root_dir / "tafangmonitor.exe"
+        if tafangmonitor_exe.exists():
+            nuitka_cmd.append(f"--include-data-files={tafangmonitor_exe}=tafangmonitor.exe")
+        else:
+            print_warning(f"未找到 tafangmonitor.exe: {tafangmonitor_exe}，跳过包含")
+
         # 运行 Nuitka
-        print("\n运行 Nuitka...")
+        print("\n运行 Nuitka 打包后端...")
         if not run_command(nuitka_cmd, cwd=self.root_dir):
+            print_error("Nuitka 打包失败")
             return False
 
         # 复制到 resources/backend
-        print("\n复制后端到 resources...")
-        backend_dist = output_dir / "dist" / "main.dist"
-        if backend_dist.exists():
-            shutil.rmtree(backend_dist)
-
-        print_success(f"后端已复制到 {backend_dist}")
+        print("\n复制后端到 resources/backend...")
+        try:
+            resources_backend.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(nuitka_output, resources_backend)
+            print_success(f"后端已复制到 {resources_backend}")
+        except Exception as e:
+            print_error(f"复制后端文件失败: {str(e)}")
+            return False
 
         return True
     
     def build(self) -> bool:
         """执行完整构建流程"""
         print(f"\n{Color.BOLD}AutoGLM-GUI Electron 构建工具{Color.RESET}")
-        print(f"项目根目录: {self.root_dir}\n") 
+        print(f"项目根目录: {self.root_dir}")
+        print(f"当前系统: {self.os_name}\n") 
+        
+        total_steps = 3
+        current_step = 1
+        
         steps = [
             ("环境检查", lambda: self.check_environment()),
-            ("Python 依赖", lambda: self.sync_python_deps()),
-            (
-                "后端打包",
-                lambda: self.build_backend()
-            )
+            ("Python 依赖同步", lambda: self.sync_python_deps()),
+            ("后端打包", lambda: self.build_backend())
         ]
 
         for step_name, step_func in steps:
+            print_step(step_name, total_steps, current_step)
             if not step_func():
                 print_error(f"\n构建失败: {step_name}")
                 return False
+            current_step += 1
 
+        print_success("\n✅ 所有构建步骤完成！")
         return True
 
 
 def main():
     parser = argparse.ArgumentParser(description="AutoGLM-GUI Electron 一键构建脚本")
+    # 添加跳过参数
+    parser.add_argument("--skip-frontend", action="store_true", help="跳过前端构建")
+    parser.add_argument("--skip-adb", action="store_true", help="跳过ADB工具下载")
+    parser.add_argument("--skip-backend", action="store_true", help="跳过后端打包")
     args = parser.parse_args()
 
     builder = ElectronBuilder(args)
@@ -233,12 +323,11 @@ def main():
         success = builder.build()
         sys.exit(0 if success else 1)
     except KeyboardInterrupt:
-        print_error("\n\n构建已取消")
+        print_error("\n\n构建已被用户取消")
         sys.exit(1)
     except Exception as e:
-        print_error(f"\n\n构建失败: {e}")
+        print_error(f"\n\n构建失败: {str(e)}")
         import traceback
-
         traceback.print_exc()
         sys.exit(1)
 
