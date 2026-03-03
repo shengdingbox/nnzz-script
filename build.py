@@ -177,7 +177,7 @@ class ElectronBuilder:
 
         nuitka_cmd = [
             "uv", "run", "python", "-m", "nuitka",
-            "--standalone",
+            "--onefile",  # 核心修改：单文件模式
             f"--output-dir={output_dir}",
             "--output-filename=main.exe",
             "--follow-imports",
