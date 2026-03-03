@@ -157,13 +157,6 @@ class ElectronBuilder:
             "uv": "Python 包管理器",
             "python": "Python 解释器"
         }
-
-        # 根据系统补充必要工具
-        if self.os_name == "windows":
-            required_tools["where"] = "Windows 路径查找工具"
-        else:
-            required_tools["which"] = "Unix 路径查找工具"
-
         missing_tools = []
         for tool, description in required_tools.items():
             if check_command(tool):
@@ -177,7 +170,7 @@ class ElectronBuilder:
             print("\n安装指南:")
             if "uv" in missing_tools:
                 if self.os_name == "windows":
-                    print("  uv: powershell -c \"irm https://astral.sh/uv/install.ps1 | iex\"")
+                    print("  uv: curl -LsSf https://astral.sh/uv/install.sh | sh")
                 else:
                     print("  uv: curl -LsSf https://astral.sh/uv/install.sh | sh")
             return False
