@@ -185,7 +185,7 @@ class ElectronBuilder:
             "--nofollow-import-to=matplotlib,numpy",  # 仅排除不需要的模块
             "--assume-yes-for-downloads",
             f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
-            "--include-data-files=*.png=.",
+            "--include-data-files=*.png=./",
             f"--include-data-files={self.root_dir / 'tafangrunning.py'}=tafangrunning.py",
             f"--include-data-dir=autophoto=autophoto",
             f"--include-data-dir=tupianshibie=tupianshibie",
