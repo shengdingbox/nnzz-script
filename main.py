@@ -35,41 +35,32 @@ CHECK_INTERVAL = 60
 logger = None
 
 
-# 工具函数
 def resource_path(relative_path):
-    """获取资源的绝对路径，兼容开发环境和打包后的exe
-
-    Args:
-        relative_path: 资源的相对路径（如"images/icon.png"）
-
-    Returns:
-        str: 资源的绝对路径
-
-    Raises:
-        ValueError: 传入的相对路径为空时抛出
-    """
-    # 基础校验：避免传入空路径导致拼接异常
+    """获取资源的绝对路径，兼容开发环境、PyInstaller打包、Nuitka打包"""
+    # 基础校验：避免传入空路径
     if not relative_path:
         raise ValueError("相对路径不能为空！")
 
-    try:
-        # 打包后exe运行时，sys._MEIPASS会指向临时解压目录
+    base_path = ""
+    # 1. 判断是否为 Nuitka 打包环境
+    if hasattr(sys, 'nuitka') and sys.nuitka:
+        # Nuitka 打包后，sys.executable 是 exe 文件的绝对路径
+        # 取 exe 所在目录作为基础路径
+        base_path = os.path.dirname(os.path.abspath(sys.executable))
+        print(f"Nuitka打包环境 - exe所在目录: {base_path}")
+    # 2. 判断是否为 PyInstaller 打包环境（兼容原有逻辑）
+    elif hasattr(sys, '_MEIPASS'):
         base_path = sys._MEIPASS
-        print(f"打包环境 - 当前资源根目录: {base_path}")
-    except AttributeError:  # 精准捕获sys._MEIPASS不存在的异常（开发环境）
-        # 开发环境下，取当前工作目录的绝对路径
+        print(f"PyInstaller打包环境 - 临时目录: {base_path}")
+    # 3. 开发环境
+    else:
         base_path = os.path.abspath('.')
         print(f"开发环境 - 当前工作目录: {base_path}")
-    except Exception as e:  # 捕获其他未知异常并提示
-        print(f"获取基础路径时出错: {str(e)}")
-        base_path = os.path.abspath('.')
 
-    # 拼接绝对路径，自动处理不同系统的路径分隔符（\或/）
+    # 拼接绝对路径
     absolute_path = os.path.join(base_path, relative_path)
-    # 可选：打印最终路径，方便调试
     print(f"资源绝对路径: {absolute_path}")
     return absolute_path
-
 
 def get_aes_key():
     """生成AES-256加密密钥（基于密钥+盐值，不可逆）"""
