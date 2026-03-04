@@ -36,28 +36,21 @@ logger = None
 
 
 def resource_path(relative_path):
-    """获取资源的绝对路径，兼容开发环境、PyInstaller打包、Nuitka打包"""
-    # 基础校验：避免传入空路径
     if not relative_path:
         raise ValueError("相对路径不能为空！")
 
     base_path = ""
-    # 1. 判断是否为 Nuitka 打包环境
-    if hasattr(sys, 'nuitka') and sys.nuitka:
-        # Nuitka 打包后，sys.executable 是 exe 文件的绝对路径
-        # 取 exe 所在目录作为基础路径
+    # 检测 Nuitka 打包时传入的自定义标识
+    if hasattr(sys, 'NUITKA_PACKAGED') and sys.NUITKA_PACKAGED:
         base_path = os.path.dirname(os.path.abspath(sys.executable))
-        print(f"Nuitka打包环境 - exe所在目录: {base_path}")
-    # 2. 判断是否为 PyInstaller 打包环境（兼容原有逻辑）
+        print(f"Nuitka打包环境 - exe目录: {base_path}")
     elif hasattr(sys, '_MEIPASS'):
         base_path = sys._MEIPASS
         print(f"PyInstaller打包环境 - 临时目录: {base_path}")
-    # 3. 开发环境
     else:
         base_path = os.path.abspath('.')
         print(f"开发环境 - 当前工作目录: {base_path}")
 
-    # 拼接绝对路径
     absolute_path = os.path.join(base_path, relative_path)
     print(f"资源绝对路径: {absolute_path}")
     return absolute_path
