@@ -187,7 +187,6 @@ class ElectronBuilder:
             # "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
             "--show-memory",
-            "--define=NUITKA_PACKAGED=True",
             str(entry_point),
         ]
 
