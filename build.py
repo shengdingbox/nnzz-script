@@ -184,10 +184,6 @@ class ElectronBuilder:
             "--follow-imports",
             "--assume-yes-for-downloads",
             f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
-            "--include-data-files=*.png=./",
-            f"--include-data-files={self.root_dir / 'tafangrunning.py'}=tafangrunning.py",
-            f"--include-data-dir=autophoto=autophoto",
-            f"--include-data-dir=tupianshibie=tupianshibie",
             "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
             "--show-memory",

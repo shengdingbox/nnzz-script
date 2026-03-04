@@ -2,7 +2,7 @@ import hashlib
 from datetime import datetime
 
 # 常量定义（与main.py保持一致）
-SECRET_KEY = 'tf_secure_2026_custom_888'
+SECRET_KEY = 'sd_secure_2026_custom_888'
 ACTIVATE_CODE_EXPIRE_MINUTES = 30
 SUPPORT_DAYS = {'3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
 DATE_FORMAT = '%Y%m%d'
