@@ -26,6 +26,7 @@ ITERATIONS = 100000
 DATE_FORMAT = '%Y%m%d'
 DISPLAY_DATE_FORMAT = '%Y-%m-%d'
 REG_PATH = 'Software\\ShengDingAssistant_Pro'
+REG_KEY = 'SD_LICENSE_DATA'
 ACTIVATE_CODE_EXPIRE_MINUTES = 30
 SUPPORT_DAYS = {'1小时': 1/24, '3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
 CHECK_INTERVAL = 60
@@ -78,7 +79,7 @@ def save_license(hwid, code, days):
     else:
         try:
             key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, REG_PATH)
-            winreg.SetValueEx(key, 'TF_LICENSE_DATA', 0, winreg.REG_SZ, encrypted_data)
+            winreg.SetValueEx(key, REG_KEY, 0, winreg.REG_SZ, encrypted_data)
             winreg.CloseKey(key)
         except:
             return None
@@ -87,7 +88,7 @@ def load_license():
     """从注册表→解密→读取激活信息（静默验证）"""
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, REG_PATH)
-        encrypted_data, _ = winreg.QueryValueEx(key, 'TF_LICENSE_DATA')
+        encrypted_data, _ = winreg.QueryValueEx(key, REG_KEY)
         winreg.CloseKey(key)
         license_data = decrypt_data(encrypted_data)
         if not license_data:
