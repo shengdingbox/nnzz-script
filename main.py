@@ -16,6 +16,7 @@ import psutil
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import ctypes
 
 # 常量定义
 TAFANG_EXE_NAME = 'tafangmonitor.exe'
@@ -35,64 +36,51 @@ CHECK_INTERVAL = 60
 logger = None
 
 
+def get_real_exe_path():
+    """获取 Nuitka --onefile 模式下，真实的 exe 路径（穿透临时目录）"""
+    if sys.platform != 'win32':
+        return os.path.abspath(sys.executable)
+
+    # Windows API：获取当前进程的可执行文件路径
+    buf = ctypes.create_unicode_buffer(1024)
+    ctypes.windll.kernel32.GetModuleFileNameW(None, buf, 1024)
+    real_exe = buf.value
+    return real_exe
+
 def resource_path(relative_path):
-    """获取资源的绝对路径，兼容：开发环境、PyInstaller打包、Nuitka打包（所有模式）"""
+    """获取资源的绝对路径，兼容：开发环境、PyInstaller打包、Nuitka打包（--onefile/standalone）"""
     # 基础校验：避免空路径
     if not relative_path:
         raise ValueError("相对路径不能为空！")
 
     base_path = ""
-    is_nuitka = False
-    # ========== 核心：多维度检测 Nuitka 环境 ==========
-    # 方式1：检测官方 sys.nuitka 属性（优先）
-    if hasattr(sys, 'nuitka') and getattr(sys, 'nuitka', False):
-        is_nuitka = True
-    # 方式2：检测 Nuitka 特有环境变量（兜底）
-    elif 'NUITKA_ONEFILE' in os.environ or 'NUITKA_PROJECT_DIR' in os.environ:
-        is_nuitka = True
-    # 方式3：检测 sys.executable 是否为 Nuitka 编译的 exe（终极兜底）
-    elif os.path.basename(sys.executable).lower().endswith('.exe') and \
-         not sys.executable.lower().endswith('python.exe') and \
-         not sys.executable.lower().endswith('pythonw.exe'):
-        # 排除 Python 解释器本身，判定为打包后的 exe
-        is_nuitka = True
+    is_packaged = False  # 是否为打包环境
 
-    # ========== 根据环境确定基础路径 ==========
-    if is_nuitka:
-        # Nuitka 环境：优先取 exe 所在目录（兼容 onefile/standalone 模式）
-        # 处理 onefile 模式下临时路径问题
-        if hasattr(sys, '_NUITKA_ONEFILE_TEMP_DIR'):
-            # onefile 模式：嵌入的资源会解压到这个临时目录
-            base_path = sys._NUITKA_ONEFILE_TEMP_DIR
-            print(f"✅ Nuitka OneFile 模式 - 临时解压目录: {base_path}")
-        else:
-            # standalone 模式：取 exe 所在目录
-            base_path = os.path.dirname(os.path.abspath(sys.executable))
-            print(f"✅ Nuitka Standalone 模式 - exe目录: {base_path}")
-        
-        # 额外兜底：如果临时目录不存在，回退到 exe 目录
-        if not os.path.exists(base_path):
-            base_path = os.path.dirname(os.path.abspath(sys.executable))
-            print(f"⚠️  临时目录不存在，回退到 exe 目录: {base_path}")
-
+    # ========== 核心修复：优先获取真实 exe 路径 ==========
+    real_exe_path = get_real_exe_path()
+    # 判断是否为打包后的 exe（排除 Python 解释器）
+    if (os.path.basename(real_exe_path).lower().endswith('.exe') and
+            not real_exe_path.lower().endswith(('python.exe', 'pythonw.exe'))):
+        is_packaged = True
+        # 取真实 exe 所在目录作为基础路径
+        base_path = os.path.dirname(real_exe_path)
+        print(f"✅ 打包环境（Nuitka/PyInstaller）- 真实exe目录: {base_path}")
+    # ========== 兼容 PyInstaller 临时目录 ==========
     elif hasattr(sys, '_MEIPASS'):
-        # PyInstaller 环境
         base_path = sys._MEIPASS
         print(f"✅ PyInstaller打包环境 - 临时目录: {base_path}")
-    
+        is_packaged = True
+    # ========== 开发环境 ==========
     else:
-        # 开发环境
         base_path = os.path.abspath('.')
         print(f"✅ 开发环境 - 当前工作目录: {base_path}")
 
-    # ========== 拼接并校验最终路径 ==========
+    # 拼接并校验最终路径
     absolute_path = os.path.normpath(os.path.join(base_path, relative_path))
     print(f"📌 资源最终路径: {absolute_path}")
-    
-    # 调试：打印关键信息，帮助定位问题
-    print(f"🔍 调试信息 - sys.executable: {sys.executable}")
-    print(f"🔍 调试信息 - sys.nuitka: {getattr(sys, 'nuitka', '不存在')}")
-    print(f"🔍 调试信息 - Nuitka 临时目录: {getattr(sys, '_NUITKA_ONEFILE_TEMP_DIR', '不存在')}")
+
+    # 调试信息（重点看真实 exe 路径）
+    print(f"🔍 调试信息 - 真实exe路径: {real_exe_path}")
     print(f"🔍 调试信息 - 路径是否存在: {os.path.exists(absolute_path)}")
 
     return absolute_path
