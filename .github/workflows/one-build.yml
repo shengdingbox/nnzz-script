@@ -1,4 +1,4 @@
-name: Build Electron App
+name: Build Electron One App
 
 on:
   workflow_dispatch:
@@ -35,7 +35,7 @@ jobs:
             ${{ runner.os }}-uv-
 
       - name: Build application
-        run: uv run python build.py
+        run: uv run python one_build.py
 
       - name: List dist directory
         shell: pwsh
@@ -47,5 +47,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-build
-          path: ./dist/main.exe
+          path: ./dist/onemain.exe
           retention-days: 1
