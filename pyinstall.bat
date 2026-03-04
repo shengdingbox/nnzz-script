@@ -1,0 +1,1 @@
+uv run pyinstaller --onefile --name main --distpath dist --add-data "tafangmonitor.exe;." --noconfirm --clean --windowed --log-level INFO main.py 

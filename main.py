@@ -58,43 +58,50 @@ def get_real_exe_path():
     real_exe = buf.value
     return real_exe
 
+# def resource_path(relative_path):
+#     """获取资源的绝对路径，兼容：开发环境、PyInstaller打包、Nuitka打包（--onefile/standalone）"""
+#     # 基础校验：避免空路径
+#     if not relative_path:
+#         raise ValueError("相对路径不能为空！")
+#
+#     base_path = ""
+#     is_packaged = False  # 是否为打包环境
+#
+#     # ========== 核心修复：优先获取真实 exe 路径 ==========
+#     real_exe_path = get_real_exe_path()
+#     # 判断是否为打包后的 exe（排除 Python 解释器）
+#     if (os.path.basename(real_exe_path).lower().endswith('.exe') and
+#             not real_exe_path.lower().endswith(('python.exe', 'pythonw.exe'))):
+#         is_packaged = True
+#         # 取真实 exe 所在目录作为基础路径
+#         base_path = os.path.dirname(real_exe_path)
+#         print(f"✅ 打包环境（Nuitka/PyInstaller）- 真实exe目录: {base_path}")
+#     # ========== 兼容 PyInstaller 临时目录 ==========
+#     elif hasattr(sys, '_MEIPASS'):
+#         base_path = sys._MEIPASS
+#         print(f"✅ PyInstaller打包环境 - 临时目录: {base_path}")
+#         is_packaged = True
+#     # ========== 开发环境 ==========
+#     else:
+#         base_path = os.path.abspath('.')
+#         print(f"✅ 开发环境 - 当前工作目录: {base_path}")
+#
+#     # 拼接并校验最终路径
+#     absolute_path = os.path.normpath(os.path.join(base_path, relative_path))
+#     print(f"📌 资源最终路径: {absolute_path}")
+#
+#     # 调试信息（重点看真实 exe 路径）
+#     print(f"🔍 调试信息 - 真实exe路径: {real_exe_path}")
+#     print(f"🔍 调试信息 - 路径是否存在: {os.path.exists(absolute_path)}")
+#
+#     return absolute_path
 def resource_path(relative_path):
-    """获取资源的绝对路径，兼容：开发环境、PyInstaller打包、Nuitka打包（--onefile/standalone）"""
-    # 基础校验：避免空路径
-    if not relative_path:
-        raise ValueError("相对路径不能为空！")
-
-    base_path = ""
-    is_packaged = False  # 是否为打包环境
-
-    # ========== 核心修复：优先获取真实 exe 路径 ==========
-    real_exe_path = get_real_exe_path()
-    # 判断是否为打包后的 exe（排除 Python 解释器）
-    if (os.path.basename(real_exe_path).lower().endswith('.exe') and
-            not real_exe_path.lower().endswith(('python.exe', 'pythonw.exe'))):
-        is_packaged = True
-        # 取真实 exe 所在目录作为基础路径
-        base_path = os.path.dirname(real_exe_path)
-        print(f"✅ 打包环境（Nuitka/PyInstaller）- 真实exe目录: {base_path}")
-    # ========== 兼容 PyInstaller 临时目录 ==========
-    elif hasattr(sys, '_MEIPASS'):
+    """获取资源的绝对路径，兼容开发环境和打包后的exe"""
+    try:
         base_path = sys._MEIPASS
-        print(f"✅ PyInstaller打包环境 - 临时目录: {base_path}")
-        is_packaged = True
-    # ========== 开发环境 ==========
-    else:
+    except Exception:
         base_path = os.path.abspath('.')
-        print(f"✅ 开发环境 - 当前工作目录: {base_path}")
-
-    # 拼接并校验最终路径
-    absolute_path = os.path.normpath(os.path.join(base_path, relative_path))
-    print(f"📌 资源最终路径: {absolute_path}")
-
-    # 调试信息（重点看真实 exe 路径）
-    print(f"🔍 调试信息 - 真实exe路径: {real_exe_path}")
-    print(f"🔍 调试信息 - 路径是否存在: {os.path.exists(absolute_path)}")
-
-    return absolute_path
+    return os.path.join(base_path, relative_path)
 
 def get_aes_key():
     """生成AES-256加密密钥（基于密钥+盐值，不可逆）"""
