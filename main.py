@@ -1,21 +1,21 @@
-import sys
-import os
-import subprocess
+import base64
 import hashlib
 import json
-from datetime import datetime, timedelta
-import psutil
-import winreg
+import os
+import subprocess
+import sys
 import threading
 import time
-import requests
+import tkinter as tk
+import winreg
+from datetime import datetime, timedelta
+from tkinter import messagebox
+from tkinter import ttk
+
+import psutil
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
-import base64
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox
 
 # 常量定义
 TAFANG_EXE_NAME = 'tafangmonitor.exe'
@@ -28,26 +28,55 @@ DISPLAY_DATE_FORMAT = '%Y-%m-%d'
 REG_PATH = 'Software\\ShengDingAssistant_Pro'
 REG_KEY = 'SD_LICENSE_DATA'
 ACTIVATE_CODE_EXPIRE_MINUTES = 30
-SUPPORT_DAYS = {'1小时': 1/24, '3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
+SUPPORT_DAYS = {'1小时': 1 / 24, '3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
 CHECK_INTERVAL = 60
 
 # 全局变量
 logger = None
 
+
 # 工具函数
 def resource_path(relative_path):
-    """获取资源的绝对路径，兼容开发环境和打包后的exe"""
+    """获取资源的绝对路径，兼容开发环境和打包后的exe
+
+    Args:
+        relative_path: 资源的相对路径（如"images/icon.png"）
+
+    Returns:
+        str: 资源的绝对路径
+
+    Raises:
+        ValueError: 传入的相对路径为空时抛出
+    """
+    # 基础校验：避免传入空路径导致拼接异常
+    if not relative_path:
+        raise ValueError("相对路径不能为空！")
+
     try:
+        # 打包后exe运行时，sys._MEIPASS会指向临时解压目录
         base_path = sys._MEIPASS
-    except Exception:
+        print(f"打包环境 - 当前资源根目录: {base_path}")
+    except AttributeError:  # 精准捕获sys._MEIPASS不存在的异常（开发环境）
+        # 开发环境下，取当前工作目录的绝对路径
         base_path = os.path.abspath('.')
-    return os.path.join(base_path, relative_path)
+        print(f"开发环境 - 当前工作目录: {base_path}")
+    except Exception as e:  # 捕获其他未知异常并提示
+        print(f"获取基础路径时出错: {str(e)}")
+        base_path = os.path.abspath('.')
+
+    # 拼接绝对路径，自动处理不同系统的路径分隔符（\或/）
+    absolute_path = os.path.join(base_path, relative_path)
+    # 可选：打印最终路径，方便调试
+    print(f"资源绝对路径: {absolute_path}")
+    return absolute_path
+
 
 def get_aes_key():
     """生成AES-256加密密钥（基于密钥+盐值，不可逆）"""
     kdf = PBKDF2HMAC(algorithm=hashes.SHA256(), length=32, salt=SALT, iterations=ITERATIONS)
     key = base64.urlsafe_b64encode(kdf.derive(SECRET_KEY.encode('utf-8')))
     return Fernet(key)
+
 
 def encrypt_data(data):
     """加密数据（字典→JSON→AES→十六进制，完全乱码）"""
@@ -59,6 +88,7 @@ def encrypt_data(data):
     except:
         return None
 
+
 def decrypt_data(encrypted_hex):
     """解密数据（十六进制→AES→JSON→字典，静默失败则返回None）"""
     try:
@@ -69,10 +99,13 @@ def decrypt_data(encrypted_hex):
     except:
         return None
 
+
 def save_license(hwid, code, days):
     """激活信息→加密→写入注册表（无文件，完全隐藏）"""
     expire_time = datetime.now() + timedelta(days=days)
-    license_data = {'hwid': hwid, 'activate_code': code, 'days': days, 'expire_time': expire_time.strftime('%Y-%m-%d %H:%M:%S'), 'activated_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'activated': True}
+    license_data = {'hwid': hwid, 'activate_code': code, 'days': days,
+                    'expire_time': expire_time.strftime('%Y-%m-%d %H:%M:%S'),
+                    'activated_time': datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 'activated': True}
     encrypted_data = encrypt_data(license_data)
     if not encrypted_data:
         return None
@@ -83,6 +116,7 @@ def save_license(hwid, code, days):
             winreg.CloseKey(key)
         except:
             return None
+
 
 def load_license():
     """从注册表→解密→读取激活信息（静默验证）"""
@@ -99,6 +133,7 @@ def load_license():
     except:
         return None
 
+
 def is_license_valid():
     """验证激活信息（静默恢复：篡改则失效）"""
     license_data = load_license()
@@ -106,7 +141,7 @@ def is_license_valid():
         return False
     else:
         try:
-            if license_data['hwid']!= get_hwid():
+            if license_data['hwid'] != get_hwid():
                 raise Exception('机器码不匹配')
             else:
                 expire_time = datetime.strptime(license_data['expire_time'], '%Y-%m-%d %H:%M:%S')
@@ -121,9 +156,11 @@ def is_license_valid():
             except:
                 return False
 
+
 def get_today_hash():
     today_raw = datetime.now().strftime(DATE_FORMAT)
     return hashlib.sha256(today_raw.encode()).hexdigest()[:16].upper()
+
 
 def get_hwid():
     """生成本机唯一机器码（16位）"""
@@ -146,15 +183,18 @@ def get_hwid():
         # 异常情况下使用不同的随机数生成方式
         return hashlib.sha1(os.urandom(32)).hexdigest()[:16].upper()
 
+
 def get_time_token():
     now = datetime.now()
     return now.strftime('%Y%m%d%H') + f'{now.minute // ACTIVATE_CODE_EXPIRE_MINUTES}'
+
 
 def make_activate_code(hwid, days):
     today_hash = get_today_hash()
     time_token = get_time_token()
     raw_str = f'{today_hash}|{hwid}|{days}|{time_token}|{SECRET_KEY}'
     return hashlib.sha256(raw_str.encode()).hexdigest()[:16].upper()
+
 
 def verify_activate_code(hwid, input_code):
     today_hash = get_today_hash()
@@ -172,6 +212,7 @@ def verify_activate_code(hwid, input_code):
                 return days_value
     return None
 
+
 def kill_process_by_name(process_name):
     killed = False
     for proc in psutil.process_iter(['pid', 'name']):
@@ -183,11 +224,13 @@ def kill_process_by_name(process_name):
             continue
     return killed
 
+
 class LicenseWatchdog(threading.Thread):
     """后台线程：每隔1分钟检查授权是否到期，到期则终止脚本"""
+
     def __init__(self):
         super().__init__(daemon=True)
-    
+
     def run(self):
         while True:
             time.sleep(CHECK_INTERVAL)
@@ -198,10 +241,12 @@ class LicenseWatchdog(threading.Thread):
                 logger.warning('授权已到期，脚本已终止！')
                 break
 
+
 def stop_all_scripts_silent():
     """静默终止所有脚本，无弹窗、无界面更新"""
     # 由于我们不再使用tafangmonitor.exe，只需要终止任务进程
     kill_process_by_name(TASK_EXE_NAME)
+
 
 def main():
     # 初始化数据
@@ -209,99 +254,101 @@ def main():
     today_raw = datetime.now().strftime(DISPLAY_DATE_FORMAT)
     license_valid = is_license_valid()
     license_data = load_license() if license_valid else None
-    
+
     # 创建主窗口
     root = tk.Tk()
     root.title('塔防自动化助手 - 专业版')
     root.geometry('700x650')  # 增加窗口高度，确保所有内容都能显示
     root.resizable(True, True)  # 允许调整窗口大小
-    
+
     # 设置字体和颜色
     root.option_add('*Font', 'Arial 10')
     root.option_add('*Background', '#f0f0f0')
-    
+
     # 创建主框架
     main_frame = ttk.Frame(root, padding='10')
     main_frame.pack(fill=tk.BOTH, expand=True)
-    
+
     # 标题区域
     title_frame = ttk.Frame(main_frame)
     title_frame.pack(fill=tk.X, pady=5)
-    
+
     ttk.Label(title_frame, text='逆战未来塔防盛鼎脚本', font=('Arial', 14, 'bold')).pack(side=tk.LEFT, padx=5)
     ttk.Label(title_frame, text='⚡', font=('Arial', 12)).pack(side=tk.LEFT, padx=5)
-    
+
     # 状态区域
     status_frame = ttk.Frame(main_frame)
     status_frame.pack(fill=tk.X, pady=5)
-    
+
     status_text = '未激活 | 请输入激活码' if not license_valid else '已激活 | 到期：' + license_data["expire_time"]
     ttk.Label(status_frame, text=status_text, font=('Arial', 11, 'bold')).pack(anchor=tk.W)
-    
+
     # 公告区域
     announcement_frame = ttk.LabelFrame(main_frame, text='公告', padding='5')
     announcement_frame.pack(fill=tk.X, pady=5)
-    
+
     announcement_texts = [
         '• 一机一码，激活后绑定本机',
         '欢迎使用逆战未来塔防盛鼎脚本',
         '遇到问题请前往群文件更新到最新版',
         '游戏每隔一段时间就会来一次大批量检测行为和检测历史战绩记录，请合理安排挂机时间，尽量不要一直挂机，导致禁赛。'
     ]
-    
+
     for text in announcement_texts:
         ttk.Label(announcement_frame, text=text).pack(anchor=tk.W, pady=2)
-    
+
     # 机器码和激活码区域
     activation_frame = ttk.LabelFrame(main_frame, text='激活中心', padding='5')
     activation_frame.pack(fill=tk.X, pady=5)
-    
+
     activation_grid = ttk.Frame(activation_frame)
     activation_grid.pack(fill=tk.X)
-    
+
     # 机器码
     ttk.Label(activation_grid, text='机器码：').grid(row=0, column=0, sticky=tk.W, pady=5)
     ttk.Label(activation_grid, text=hwid).grid(row=0, column=1, sticky=tk.W, pady=5)
     ttk.Button(activation_grid, text='复制', command=lambda: copy_hwid(hwid)).grid(row=0, column=2, padx=10, pady=5)
-    
+
     # 激活码
     ttk.Label(activation_grid, text='激活码：').grid(row=1, column=0, sticky=tk.W, pady=5)
     activate_code_var = tk.StringVar()
     ttk.Entry(activation_grid, textvariable=activate_code_var, width=30).grid(row=1, column=1, sticky=tk.W, pady=5)
-    ttk.Button(activation_grid, text='立即激活', command=lambda: activate_code(activate_code_var.get(), hwid, root)).grid(row=1, column=2, padx=10, pady=5)
-    
+    ttk.Button(activation_grid, text='立即激活',
+               command=lambda: activate_code(activate_code_var.get(), hwid, root)).grid(row=1, column=2, padx=10,
+                                                                                        pady=5)
+
     # 功能按钮区域 - 放在最下面
     button_frame = ttk.Frame(main_frame)
     button_frame.pack(fill=tk.X, pady=5)
-    
+
     # 启动按钮
     start_button = ttk.Button(button_frame, text='启动塔防脚本 (F2)', command=lambda: start_script(license_valid))
     start_button.pack(side=tk.LEFT, padx=5)
     start_button.state(['disabled'] if not license_valid else [])
-    
+
     # 终止按钮
     stop_button = ttk.Button(button_frame, text='终止所有脚本 (F10)', command=lambda: stop_script(license_valid))
     stop_button.pack(side=tk.LEFT, padx=5)
     stop_button.state(['disabled'] if not license_valid else [])
-    
+
     # 日志输出区域
     log_frame = ttk.LabelFrame(main_frame, text='运行日志', padding='5')
     log_frame.pack(fill=tk.BOTH, expand=True, pady=5)
-    
+
     # 创建文本框用于显示日志
     log_text = tk.Text(log_frame, height=10, wrap=tk.WORD)
     log_text.pack(fill=tk.BOTH, expand=True)
-    
+
     # 添加滚动条
     scrollbar = ttk.Scrollbar(log_text, orient=tk.VERTICAL, command=log_text.yview)
     scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
     log_text.config(yscrollcommand=scrollbar.set)
-    
+
     # 定义日志类
     class Logger:
         def __init__(self, text_widget):
             self.text_widget = text_widget
-        
+
         def log(self, message):
             """输出日志信息"""
             from datetime import datetime
@@ -309,46 +356,47 @@ def main():
             log_message = f"[{timestamp}] {message}\n"
             self.text_widget.insert(tk.END, log_message)
             self.text_widget.see(tk.END)  # 自动滚动到最新内容
-        
+
         def info(self, message):
             """输出信息日志"""
             self.log(f"INFO: {message}")
-        
+
         def error(self, message):
             """输出错误日志"""
             self.log(f"ERROR: {message}")
-        
+
         def warning(self, message):
             """输出警告日志"""
             self.log(f"WARNING: {message}")
-    
+
     # 创建日志实例
     global logger
     logger = Logger(log_text)
-    
+
     # 启动授权监控线程
     if license_valid:
         watchdog = LicenseWatchdog()
         watchdog.start()
-    
+
     # 快捷键处理
     def on_key_press(event):
         if event.keysym == 'F2':
             start_script(license_valid)
         elif event.keysym == 'F10':
             stop_script(license_valid)
-    
+
     root.bind('<KeyPress>', on_key_press)
-    
+
     # 窗口关闭处理
     def on_closing():
         stop_all_scripts_silent()
         root.destroy()
-    
+
     root.protocol('WM_DELETE_WINDOW', on_closing)
-    
+
     # 运行主循环
     root.mainloop()
+
 
 def copy_hwid(hwid):
     try:
@@ -358,13 +406,14 @@ def copy_hwid(hwid):
     except ImportError:
         messagebox.showinfo('提示', '请安装pyperclip库以使用复制功能')
 
+
 def activate_code(input_code, hwid, root):
     input_code = input_code.strip().upper()
     if len(input_code) != 16:
         logger.warning('激活码必须是16位字符！')
         messagebox.showinfo('提示', '激活码必须是16位字符！')
         return
-    
+
     valid_days = verify_activate_code(hwid, input_code)
     if valid_days:
         save_license(hwid, input_code, valid_days)
@@ -377,6 +426,7 @@ def activate_code(input_code, hwid, root):
     else:
         logger.error('激活失败：激活码无效、已过期（30分钟内有效）或不匹配本机！')
         messagebox.showinfo('激活失败', '激活码无效、已过期（30分钟内有效）或不匹配本机！')
+
 
 def start_script(license_valid):
     if license_valid:
@@ -396,6 +446,7 @@ def start_script(license_valid):
         logger.warning('未激活/授权已到期，无法启动脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
 
+
 def stop_script(license_valid):
     if license_valid:
         # 由于我们不再使用tafangmonitor.exe，只需要检查任务进程
@@ -410,6 +461,7 @@ def stop_script(license_valid):
     else:
         logger.warning('未激活/授权已到期，无需终止脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无需终止脚本！')
+
 
 if __name__ == '__main__':
     main()
