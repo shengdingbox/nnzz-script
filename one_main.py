@@ -380,13 +380,15 @@ def activate_code(input_code, hwid, root):
 def start_script(license_valid):
     if license_valid:
         try:
-            tafang_exe_path = resource_path(TAFANG_EXE_NAME)
-            if not os.path.exists(tafang_exe_path):
-                messagebox.showinfo('错误', '核心文件缺失，请重新获取软件！')
-                return
-            else:
-                subprocess.Popen([tafang_exe_path], creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
-                messagebox.showinfo('成功', '塔防脚本启动成功！')
+            # 导入tafangrunning模块并调用run_game_cycle()函数
+            import tafangrunning
+            # 设置logger实例
+            tafangrunning.set_logger(logger)
+            # 在新线程中运行，避免阻塞主界面
+            import threading
+            t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
+            t.start()
+            logger.info('塔防脚本启动成功！')
             messagebox.showinfo('成功', '塔防脚本启动成功！')
         except Exception as e:
             logger.error(f'启动失败：{str(e)}')
@@ -398,9 +400,8 @@ def start_script(license_valid):
 def stop_script(license_valid):
     if license_valid:
         # 由于我们不再使用tafangmonitor.exe，只需要检查任务进程
-        monitor_killed = kill_process_by_name(TAFANG_EXE_NAME)
         task_killed = kill_process_by_name(TASK_EXE_NAME)
-        if monitor_killed or task_killed:
+        if task_killed:
             logger.info('已终止所有运行的脚本！')
             messagebox.showinfo('成功', '已终止所有运行的脚本！')
         else:

@@ -37,6 +37,9 @@ jobs:
       - name: Build application
         run: uv run python build.py
 
+      - name: Build application
+        run: uv run python one_build.py
+
       - name: List dist directory
         shell: pwsh
         run: |
@@ -48,4 +51,11 @@ jobs:
         with:
           name: windows-build
           path: ./dist/main.exe
+          retention-days: 1
+
+      - name: Upload Windows build (temporary)
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build
+          path: ./dist/onemain.exe
           retention-days: 1
