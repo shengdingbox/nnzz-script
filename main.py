@@ -37,11 +37,22 @@ logger = None
 
 
 def get_real_exe_path():
-    """获取 Nuitka --onefile 模式下，真实的 exe 路径（穿透临时目录）"""
+    """
+    获取真实的 exe 路径（穿透 Nuitka --onefile 临时目录）
+
+    Nuitka --onefile 运行时会设置环境变量 NUITKA_ONEFILE_PARENT，
+    指向用户实际双击的那个 exe 的完整路径。
+    PyInstaller 同理有 sys._MEIPASS，但 exe 本身路径用 sys.executable。
+    """
     if sys.platform != 'win32':
         return os.path.abspath(sys.executable)
 
-    # Windows API：获取当前进程的可执行文件路径
+    # ✅ 优先：Nuitka --onefile 专用环境变量（官方方案）
+    nuitka_parent = os.environ.get('NUITKA_ONEFILE_PARENT')
+    if nuitka_parent and os.path.isfile(nuitka_parent):
+        return nuitka_parent
+
+    # ✅ 次选：Windows API（适用于 Nuitka --standalone 或 PyInstaller）
     buf = ctypes.create_unicode_buffer(1024)
     ctypes.windll.kernel32.GetModuleFileNameW(None, buf, 1024)
     real_exe = buf.value
