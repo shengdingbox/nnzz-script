@@ -142,7 +142,8 @@ def find_image(template_path, threshold=0.8):
             return (x, y, max_val)
         else:
             if logger:
-                logger.info(f'未找到目标图片 | 最高相似度: {max_val:.3f}')
+                # logger.info(f'未找到目标图片{template_path} | 最高相似度: {max_val:.3f}')
+                time.sleep(0.1)
             else:
                 print(f'未找到目标图片 | 最高相似度: {max_val:.3f}')
             return None
@@ -177,6 +178,7 @@ def click_at(x, y, button='left', delay=0.1):
 def wait_for_image(template_path, threshold=0.75, check_interval=1.0, Afterrecognition=0.0):
     if logger:
         logger.info(f'等待图片出现: {template_path}')
+        time.sleep(0.5)
     else:
         print(f'等待图片出现: {template_path}')
     while True:
@@ -184,9 +186,9 @@ def wait_for_image(template_path, threshold=0.75, check_interval=1.0, Afterrecog
         if result is not None:
             x, y, similarity = result
             if logger:
-                logger.info(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
+                logger.info(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f},{template_path}')
             else:
-                print(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
+                print(f'✅ 检测到目标图片！坐标: ({x}, {y}), 相似度: {similarity:.3f},{template_path}')
             time.sleep(Afterrecognition)
             return result
         else:
@@ -352,6 +354,7 @@ def traverse():
             time.sleep(1)
         return False
 def main():
+    logger.info('开始运行游戏循环main')
     global wave_counter
     # ***<module>.main: Failure: Different control flow
     with wave_lock:
@@ -1018,6 +1021,8 @@ def run_game_cycle():
     # ========== 启动后台监控线程 ==========
     # 启动周期性图像检查线程（守护线程，主程序退出时自动结束）
     # 作用：后台持续检查游戏画面中的特定图像，不阻塞主线程
+    time.sleep(10)
+    logger.info('启动游戏自动化核心循环...')
     t1 = threading.Thread(target=periodic_image_check, daemon=True)
     t1.start()
 
@@ -1070,11 +1075,12 @@ def run_game_cycle():
 
         # 等待画面出现"成功进入游戏"的标识（autophoto/chenggongjinruyouxi.png）
         # Afterrecognition=1：识别到图像后再等待1秒，确保场景加载完成
-        wait_for_image(resource_path('autophoto/chenggongjinruyouxi.png'), threshold=0.75, Afterrecognition=1)
+        wait_for_image(resource_path('autophoto/chenggongjinruyouxi.png'), threshold=0.65, Afterrecognition=1)
 
         # 额外等待2秒，确保游戏场景完全加载
         time.sleep(2)
         # 调用main函数，执行游戏内的核心操作逻辑（如自动打怪、走位等）
+        logger.info('开始运行游戏循环1083')
         main()
 
         # 第二阶段：游戏结束/退出后，再次循环检测"炼狱"标识
@@ -1097,6 +1103,6 @@ def run_game_cycle():
 if __name__ == '__main__':
     run_game_cycle()
 
-def main():
-    print('开始运行游戏循环')
-    run_game_cycle()
+# def main():
+#     print('开始运行游戏循环')
+#     run_game_cycle()
