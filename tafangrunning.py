@@ -363,28 +363,28 @@ def main():
     print('开局开始选择陷阱')
     press_key('N')
     time.sleep(0.5)
-    image_path = resource_path('fangkong.png')
+    image_path = resource_path('xianjing/fangkong.png')
     result = find_image(image_path, threshold=0.6)
     if result:
         x, y, similarity = result
         print(f'✅ 找到防空陷阱！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
         click_at(x, y, button='left')
     time.sleep(0.5)
-    image_path = resource_path('tianqi.png')
+    image_path = resource_path('xianjing/tianqi.png')
     result = find_image(image_path, threshold=0.6)
     if result:
         x, y, similarity = result
         print(f'✅ 找到天启陷阱！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
         click_at(x, y, button='left')
     time.sleep(0.5)
-    image_path = resource_path('zixiufucibaota.png')
+    image_path = resource_path('xianjing/zixiufucibaota.png')
     result = find_image(image_path, threshold=0.6)
     if result:
         x, y, similarity = result
         print(f'✅ 找到自修复磁暴塔！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
         click_at(x, y, button='left')
     time.sleep(0.5)
-    image_path = resource_path('tianwang.png')
+    image_path = resource_path('xianjing/tianwang.png')
     result = find_image(image_path, threshold=0.6)
     if result:
         x, y, similarity = result

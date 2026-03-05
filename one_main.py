@@ -386,12 +386,12 @@ def start_script(license_valid):
     if license_valid:
         try:
             # 导入tafangrunning模块并调用run_game_cycle()函数
-            import tafangrunning
+            import xinggang
             # 设置logger实例
-            tafangrunning.set_logger(logger)
+            xinggang.set_logger(logger)
             # 在新线程中运行，避免阻塞主界面
             import threading
-            t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
+            t = threading.Thread(target=xinggang.run_game_cycle, daemon=True)
             t.start()
             logger.info('塔防脚本启动成功！')
             messagebox.showinfo('成功', '塔防脚本启动成功！')
@@ -402,6 +402,26 @@ def start_script(license_valid):
         logger.warning('未激活/授权已到期，无法启动脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
 
+# def start_script(license_valid):
+#     if license_valid:
+#         try:
+#             # 导入tafangrunning模块并调用run_game_cycle()函数
+#             import tafangrunning
+#             # 设置logger实例
+#             tafangrunning.set_logger(logger)
+#             # 在新线程中运行，避免阻塞主界面
+#             import threading
+#             t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
+#             t.start()
+#             logger.info('塔防脚本启动成功！')
+#             messagebox.showinfo('成功', '塔防脚本启动成功！')
+#         except Exception as e:
+#             logger.error(f'启动失败：{str(e)}')
+#             messagebox.showinfo('启动失败', '错误信息：\n' + str(e))
+#     else:
+#         logger.warning('未激活/授权已到期，无法启动脚本！')
+#         messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
+#
 def stop_script(license_valid):
     if license_valid:
         # 由于我们不再使用tafangmonitor.exe，只需要检查任务进程
