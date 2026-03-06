@@ -213,83 +213,121 @@ def main():
     # 创建主窗口
     root = tk.Tk()
     root.title('塔防自动化助手 - 专业版')
-    root.geometry('700x650')  # 增加窗口高度，确保所有内容都能显示
-    root.resizable(True, True)  # 允许调整窗口大小
+    root.geometry('750x700')
+    root.resizable(True, True)
 
-    # 设置字体和颜色
-    root.option_add('*Font', 'Arial 10')
-    root.option_add('*Background', '#f0f0f0')
+    # 设置样式
+    style = ttk.Style()
+    style.theme_use('clam')
+    
+    # 定义颜色方案
+    bg_color = '#2c3e50'
+    fg_color = '#ecf0f1'
+    accent_color = '#3498db'
+    success_color = '#27ae60'
+    warning_color = '#f39c12'
+    error_color = '#e74c3c'
+    
+    # 配置样式
+    style.configure('TFrame', background=bg_color)
+    style.configure('TLabel', background=bg_color, foreground=fg_color, font=('Microsoft YaHei UI', 10))
+    style.configure('TButton', font=('Microsoft YaHei UI', 10, 'bold'), padding=10, background='white', foreground='#2c3e50', relief='flat', borderwidth=2)
+    style.configure('TLabelframe', background=bg_color, foreground=accent_color, font=('Microsoft YaHei UI', 11, 'bold'))
+    style.configure('TLabelframe.Label', background=bg_color, foreground=accent_color, font=('Microsoft YaHei UI', 11, 'bold'))
+    style.configure('TCombobox', fieldbackground='#34495e', background='#34495e', foreground=fg_color, font=('Microsoft YaHei UI', 10))
+    style.configure('TEntry', fieldbackground='#34495e', foreground=fg_color, font=('Microsoft YaHei UI', 10))
+    
+    # 按钮样式
+    style.map('TButton', background=[('active', '#ecf0f1'), ('pressed', '#bdc3c7')], foreground=[('active', '#2c3e50'), ('pressed', '#2c3e50')])
+    
+    root.configure(bg=bg_color)
 
     # 创建主框架
-    main_frame = ttk.Frame(root, padding='10')
+    main_frame = ttk.Frame(root, padding='20')
     main_frame.pack(fill=tk.BOTH, expand=True)
 
     # 标题区域
     title_frame = ttk.Frame(main_frame)
-    title_frame.pack(fill=tk.X, pady=5)
+    title_frame.pack(fill=tk.X, pady=(0, 15))
 
-    ttk.Label(title_frame, text='逆战未来塔防盛鼎脚本', font=('Arial', 14, 'bold')).pack(side=tk.LEFT, padx=5)
-    ttk.Label(title_frame, text='⚡', font=('Arial', 12)).pack(side=tk.LEFT, padx=5)
+    title_label = ttk.Label(title_frame, text='🎮 逆战未来塔防盛鼎脚本', font=('Microsoft YaHei UI', 18, 'bold'))
+    title_label.pack(side=tk.LEFT, padx=5)
 
     # 状态区域
     status_frame = ttk.Frame(main_frame)
-    status_frame.pack(fill=tk.X, pady=5)
+    status_frame.pack(fill=tk.X, pady=(0, 15))
 
-    status_text = '未激活 | 请输入激活码' if not license_valid else '已激活 | 到期：' + license_data["expire_time"]
-    ttk.Label(status_frame, text=status_text, font=('Arial', 11, 'bold')).pack(anchor=tk.W)
+    status_text = '❌ 未激活 | 请输入激活码' if not license_valid else '✅ 已激活 | 到期：' + license_data["expire_time"]
+    status_color = error_color if not license_valid else success_color
+    status_label = ttk.Label(status_frame, text=status_text, font=('Microsoft YaHei UI', 12, 'bold'))
+    status_label.pack(anchor=tk.W)
 
     # 公告区域
-    announcement_frame = ttk.LabelFrame(main_frame, text='公告', padding='5')
-    announcement_frame.pack(fill=tk.X, pady=5)
+    announcement_frame = ttk.LabelFrame(main_frame, text='📢 公告', padding='10')
+    announcement_frame.pack(fill=tk.X, pady=(0, 15))
 
     announcement_texts = [
         '• 一机一码，激活后绑定本机',
-        '欢迎使用逆战未来塔防盛鼎脚本',
-        '遇到问题请前往群文件更新到最新版',
-        '游戏每隔一段时间就会来一次大批量检测行为和检测历史战绩记录，请合理安排挂机时间，尽量不要一直挂机，导致禁赛。'
+        '• 欢迎使用逆战未来塔防盛鼎脚本',
+        '• 遇到问题请前往群文件更新到最新版',
+        '• 游戏每隔一段时间就会来一次大批量检测行为和检测历史战绩记录，请合理安排挂机时间，尽量不要一直挂机，导致禁赛。'
     ]
 
     for text in announcement_texts:
-        ttk.Label(announcement_frame, text=text).pack(anchor=tk.W, pady=2)
+        ttk.Label(announcement_frame, text=text, font=('Microsoft YaHei UI', 9)).pack(anchor=tk.W, pady=2)
 
     # 机器码和激活码区域
-    activation_frame = ttk.LabelFrame(main_frame, text='激活中心', padding='5')
-    activation_frame.pack(fill=tk.X, pady=5)
+    activation_frame = ttk.LabelFrame(main_frame, text='🔑 激活中心', padding='10')
+    activation_frame.pack(fill=tk.X, pady=(0, 15))
 
     activation_grid = ttk.Frame(activation_frame)
     activation_grid.pack(fill=tk.X)
 
     # 机器码
-    ttk.Label(activation_grid, text='机器码：').grid(row=0, column=0, sticky=tk.W, pady=5)
-    ttk.Label(activation_grid, text=hwid).grid(row=0, column=1, sticky=tk.W, pady=5)
-    ttk.Button(activation_grid, text='复制', command=lambda: copy_hwid(hwid)).grid(row=0, column=2, padx=10, pady=5)
+    ttk.Label(activation_grid, text='机器码：', font=('Microsoft YaHei UI', 10, 'bold')).grid(row=0, column=0, sticky=tk.W, pady=8)
+    ttk.Label(activation_grid, text=hwid, font=('Microsoft YaHei UI', 9)).grid(row=0, column=1, sticky=tk.W, pady=8)
+    copy_btn = ttk.Button(activation_grid, text='📋 复制', command=lambda: copy_hwid(hwid))
+    copy_btn.grid(row=0, column=2, padx=10, pady=8)
 
     # 激活码
-    ttk.Label(activation_grid, text='激活码：').grid(row=1, column=0, sticky=tk.W, pady=5)
+    ttk.Label(activation_grid, text='激活码：', font=('Microsoft YaHei UI', 10, 'bold')).grid(row=1, column=0, sticky=tk.W, pady=8)
     activate_code_var = tk.StringVar()
-    ttk.Entry(activation_grid, textvariable=activate_code_var, width=30).grid(row=1, column=1, sticky=tk.W, pady=5)
-    ttk.Button(activation_grid, text='立即激活', command=lambda: activate_code(activate_code_var.get(), hwid, root)).grid(row=1, column=2, padx=10, pady=5)
+    ttk.Entry(activation_grid, textvariable=activate_code_var, width=30).grid(row=1, column=1, sticky=tk.W, pady=8)
+    activate_btn = ttk.Button(activation_grid, text='✅ 立即激活', command=lambda: activate_code(activate_code_var.get(), hwid, root))
+    activate_btn.grid(row=1, column=2, padx=10, pady=8)
 
-    # 功能按钮区域 - 放在最下面
+    # 地图选择区域
+    map_frame = ttk.LabelFrame(main_frame, text='🗺️ 地图选择', padding='10')
+    map_frame.pack(fill=tk.X, pady=(0, 15))
+
+    map_grid = ttk.Frame(map_frame)
+    map_grid.pack(fill=tk.X)
+
+    ttk.Label(map_grid, text='选择地图：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=5)
+    map_var = tk.StringVar(value='请选择地图')
+    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '联盟大厦', '星港20号'], state='readonly', width=18)
+    map_combobox.pack(side=tk.LEFT, padx=5)
+
+    # 功能按钮区域
     button_frame = ttk.Frame(main_frame)
-    button_frame.pack(fill=tk.X, pady=5)
+    button_frame.pack(fill=tk.X, pady=(0, 15))
 
     # 启动按钮
-    start_button = ttk.Button(button_frame, text='启动塔防脚本 (F2)', command=lambda: start_script(license_valid))
-    start_button.pack(side=tk.LEFT, padx=5)
+    start_button = ttk.Button(button_frame, text='🚀 启动塔防脚本 (F2)', command=lambda: start_script(license_valid, map_var.get()))
+    start_button.pack(side=tk.LEFT, padx=8, pady=5)
     start_button.state(['disabled'] if not license_valid else [])
 
     # 终止按钮
-    stop_button = ttk.Button(button_frame, text='终止所有脚本 (F10)', command=lambda: stop_script(license_valid))
-    stop_button.pack(side=tk.LEFT, padx=5)
+    stop_button = ttk.Button(button_frame, text='⏹️ 终止所有脚本 (F10)', command=lambda: stop_script(license_valid))
+    stop_button.pack(side=tk.LEFT, padx=8, pady=5)
     stop_button.state(['disabled'] if not license_valid else [])
 
     # 日志输出区域
-    log_frame = ttk.LabelFrame(main_frame, text='运行日志', padding='5')
-    log_frame.pack(fill=tk.BOTH, expand=True, pady=5)
+    log_frame = ttk.LabelFrame(main_frame, text='📋 运行日志', padding='10')
+    log_frame.pack(fill=tk.BOTH, expand=True)
 
     # 创建文本框用于显示日志
-    log_text = tk.Text(log_frame, height=10, wrap=tk.WORD)
+    log_text = tk.Text(log_frame, height=12, wrap=tk.WORD, bg='#34495e', fg='#ecf0f1', font=('Consolas', 9), insertbackground='#ecf0f1')
     log_text.pack(fill=tk.BOTH, expand=True)
 
     # 添加滚动条
@@ -301,30 +339,44 @@ def main():
     class Logger:
         def __init__(self, text_widget):
             self.text_widget = text_widget
+            self.text_widget.tag_config('info', foreground='#3498db')
+            self.text_widget.tag_config('error', foreground='#e74c3c')
+            self.text_widget.tag_config('warning', foreground='#f39c12')
+            self.text_widget.tag_config('success', foreground='#27ae60')
+            self.text_widget.tag_config('timestamp', foreground='#95a5a6')
 
-        def log(self, message):
+        def log(self, message, tag=None):
             """输出日志信息"""
             print(message)
             from datetime import datetime
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log_message = f"[{timestamp}] {message}\n"
-            self.text_widget.insert(tk.END, log_message)
-            self.text_widget.see(tk.END)  # 自动滚动到最新内容
+            
+            if tag:
+                self.text_widget.insert(tk.END, log_message, tag)
+            else:
+                self.text_widget.insert(tk.END, log_message)
+            self.text_widget.see(tk.END)
 
         def info(self, message):
             """输出信息日志"""
             print(message)
-            self.log(f"INFO: {message}")
+            self.log(f"ℹ️ INFO: {message}", 'info')
 
         def error(self, message):
             """输出错误日志"""
             print(message)
-            self.log(f"ERROR: {message}")
+            self.log(f"❌ ERROR: {message}", 'error')
 
         def warning(self, message):
             """输出警告日志"""
             print(message)
-            self.log(f"WARNING: {message}")
+            self.log(f"⚠️ WARNING: {message}", 'warning')
+
+        def success(self, message):
+            """输出成功日志"""
+            print(message)
+            self.log(f"✅ SUCCESS: {message}", 'success')
 
     # 创建日志实例
     global logger
@@ -338,7 +390,7 @@ def main():
     # 快捷键处理
     def on_key_press(event):
         if event.keysym == 'F2':
-            start_script(license_valid)
+            start_script(license_valid, map_var.get())
         elif event.keysym == 'F10':
             stop_script(license_valid)
 
@@ -382,25 +434,40 @@ def activate_code(input_code, hwid, root):
         logger.error('激活失败：激活码无效、已过期（30分钟内有效）或不匹配本机！')
         messagebox.showinfo('激活失败', '激活码无效、已过期（30分钟内有效）或不匹配本机！')
 
-def start_script(license_valid):
-    if license_valid:
-        try:
-            # 导入tafangrunning模块并调用run_game_cycle()函数
+def start_script(license_valid, map_name):
+    if not license_valid:
+        logger.warning('未激活/授权已到期，无法启动脚本！')
+        messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
+        return
+    
+    if map_name == '请选择地图':
+        logger.warning('请先选择地图！')
+        messagebox.showinfo('提示', '请先选择地图！')
+        return
+    
+    try:
+        if map_name == '联盟大厦':
+            import tafangrunning
+            tafangrunning.set_logger(logger)
+            import threading
+            t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
+            t.start()
+            logger.success(f'塔防脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+        elif map_name == '星港20号':
             import xinggang
-            # 设置logger实例
             xinggang.set_logger(logger)
-            # 在新线程中运行，避免阻塞主界面
             import threading
             t = threading.Thread(target=xinggang.run_game_cycle, daemon=True)
             t.start()
-            logger.info('塔防脚本启动成功！')
-            messagebox.showinfo('成功', '塔防脚本启动成功！')
-        except Exception as e:
-            logger.error(f'启动失败：{str(e)}')
-            messagebox.showinfo('启动失败', '错误信息：\n' + str(e))
-    else:
-        logger.warning('未激活/授权已到期，无法启动脚本！')
-        messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
+            logger.success(f'塔防脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+        else:
+            logger.warning('未知的地图选择！')
+            messagebox.showinfo('提示', '未知的地图选择！')
+    except Exception as e:
+        logger.error(f'启动失败：{str(e)}')
+        messagebox.showinfo('启动失败', '错误信息：\n' + str(e))
 
 # def start_script(license_valid):
 #     if license_valid:
