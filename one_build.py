@@ -183,7 +183,7 @@ class ElectronBuilder:
             f"--output-filename=onemain.exe",
             "--follow-imports",
             "--assume-yes-for-downloads",
-            f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
+            f"--include-data-files={self.root_dir / 'xinggang.py'}=xinggang.py",
             "--include-data-files=*.png=./",
             f"--include-data-files={self.root_dir / 'tafangrunning.py'}=tafangrunning.py",
             f"--include-data-dir=autophoto=autophoto",
