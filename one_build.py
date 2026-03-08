@@ -174,6 +174,7 @@ class ElectronBuilder:
         # 准备 Nuitka 命令参数
         entry_point = self.root_dir / "one_main.py"
         output_dir = self.root_dir / "dist"
+        temp_dir = os.getenv("TEMP") / "_MEI3415402"
 
         nuitka_cmd = [
             "uv", "run", "python", "-m", "nuitka",
@@ -188,10 +189,11 @@ class ElectronBuilder:
             f"--include-data-files={self.root_dir / 'tafangrunning.py'}=tafangrunning.py",
             f"--include-data-dir=autophoto=autophoto",
             f"--include-data-dir=tupianshibie=tupianshibie",
-            "--onefile-tempdir-spec=\"{{TEMP}}\\_MEI3415402_%Y%m%d\"",
+            f"--onefile-tempdir-spec={temp_dir}",
             "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
-            "--show-memory",
+            "--show-memory"
+            "-jobs=4",
             str(entry_point),
         ]
 
