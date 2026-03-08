@@ -22,11 +22,26 @@ from pathlib import Path
 
 # 全局logger变量
 logger = None
+# 全局帧率变量
+fps = 120
 
 def set_logger(log_instance):
     """设置logger实例"""
     global logger
     logger = log_instance
+
+def set_fps(fps_value):
+    """设置帧率"""
+    global fps
+    fps = fps_value
+
+def adjust_time(time_value):
+    """根据帧率调整时间"""
+    global fps
+    if fps == 60:
+        return time_value * 2
+    else:
+        return time_value
 def resource_path(relative_path):
     """获取资源的绝对路径，适用于开发环境和 PyInstaller 打包后的环境"""
     if getattr(sys, "frozen", False):
@@ -95,7 +110,7 @@ def press_key(key, press_duration=0.05):
 
     # 【致命bug】缩进错误！模拟按键的核心代码被包在else里，永远执行不到
     win32api.keybd_event(vk_code, 0, 0, 0)  # 模拟【按下】按键
-    time.sleep(press_duration)  # 按住指定时长
+    time.sleep(adjust_time(press_duration))  # 按住指定时长
     win32api.keybd_event(vk_code, 0, win32con.KEYEVENTF_KEYUP, 0)  # 模拟【松开】按键
     if logger:
         logger.info(f'已按下: {key}')
@@ -669,14 +684,20 @@ def main():
                                         press_key('A', press_duration=0.5)
                                         time.sleep(0.5)
                                         for idx in indexes:
-                                            x = 347
+                                            if fps == 60:
+                                                x = 235
+                                            else:
+                                                x = 347
                                             y = ybase + 75 + 150 * idx
                                             click_at(x, y, button='left', delay=0.1)
                                             time.sleep(0.5)
                                         press_key('D', press_duration=0.5)
                                         time.sleep(0.5)
                                         for idx in indexes:
-                                            x = 1575
+                                            if fps == 60:
+                                                x = 1685
+                                            else:
+                                                x = 1575
                                             y = ybase + 75 + 150 * idx
                                             click_at(x, y, button='left', delay=0.1)
                                             time.sleep(0.5)
@@ -1015,6 +1036,20 @@ def main():
         #111
         initial_position(S=0.4)
         time.sleep(0.5)
+
+
+def waitto():
+    time.sleep(1)
+    logger.info("5秒后开始执行操作")
+    time.sleep(1)
+    logger.info("4秒后开始执行操作")
+    time.sleep(1)
+    logger.info("3秒后开始执行操作")
+    time.sleep(1)
+    logger.info("2秒后开始执行操作")
+    time.sleep(1)
+    logger.info("1秒后开始执行操作")
+
 def run_game_cycle():
     """
     游戏自动化核心循环函数
@@ -1023,7 +1058,7 @@ def run_game_cycle():
     # ========== 启动后台监控线程 ==========
     # 启动周期性图像检查线程（守护线程，主程序退出时自动结束）
     # 作用：后台持续检查游戏画面中的特定图像，不阻塞主线程
-    time.sleep(10)
+    waitto()
     logger.info('启动游戏自动化核心循环...')
     t1 = threading.Thread(target=periodic_image_check, daemon=True)
     t1.start()

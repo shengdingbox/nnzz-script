@@ -212,7 +212,7 @@ def main():
     # 创建主窗口
     root = tk.Tk()
     root.title('塔防自动化助手 - 专业版')
-    root.geometry('750x650')
+    root.geometry('900x650')
     root.resizable(True, True)
 
     # 设置样式
@@ -261,7 +261,7 @@ def main():
     left_column.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(0, 10))
 
     # 右栏
-    right_column = ttk.Frame(columns_frame, width=300)
+    right_column = ttk.Frame(columns_frame, width=450)
     right_column.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(10, 0))
     right_column.pack_propagate(False)
 
@@ -321,12 +321,17 @@ def main():
     map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '联盟大厦', '星港20号'], state='readonly', width=18)
     map_combobox.pack(side=tk.LEFT, padx=5)
 
+    ttk.Label(map_grid, text='帧率：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=(15, 5))
+    fps_var = tk.StringVar(value='请选择')
+    fps_combobox = ttk.Combobox(map_grid, textvariable=fps_var, values=['请选择', '120', '60'], state='readonly', width=10)
+    fps_combobox.pack(side=tk.LEFT, padx=5)
+
     # 功能按钮区域（右栏）
     button_frame = ttk.Frame(right_column)
     button_frame.pack(fill=tk.X, pady=(0, 15))
 
     # 启动按钮
-    start_button = ttk.Button(button_frame, text='🚀 启动塔防脚本 (F2)', command=lambda: start_script(license_valid, map_var.get()))
+    start_button = ttk.Button(button_frame, text='🚀 启动塔防脚本 (F2)', command=lambda: start_script(license_valid, map_var.get(), fps_var.get()))
     start_button.pack(side=tk.LEFT, padx=8, pady=5)
     start_button.state(['disabled'] if not license_valid else [])
 
@@ -403,7 +408,7 @@ def main():
     # 快捷键处理
     def on_key_press(event):
         if event.keysym == 'F2':
-            start_script(license_valid, map_var.get())
+            start_script(license_valid, map_var.get(), fps_var.get())
         elif event.keysym == 'F10':
             stop_script(license_valid,root)
 
@@ -447,7 +452,7 @@ def activate_code(input_code, hwid, root):
         logger.error('激活失败：激活码无效、已过期（30分钟内有效）或不匹配本机！')
         messagebox.showinfo('激活失败', '激活码无效、已过期（30分钟内有效）或不匹配本机！')
 
-def start_script(license_valid, map_name):
+def start_script(license_valid, map_name, fps):
     if not license_valid:
         logger.warning('未激活/授权已到期，无法启动脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
@@ -458,23 +463,30 @@ def start_script(license_valid, map_name):
         messagebox.showinfo('提示', '请先选择地图！')
         return
     
+    if fps == '请选择':
+        logger.warning('请先选择帧率！')
+        messagebox.showinfo('提示', '请先选择帧率！')
+        return
+    
     try:
         if map_name == '联盟大厦':
             import tafangrunning
             tafangrunning.set_logger(logger)
+            tafangrunning.set_fps(int(fps))
             import threading
             t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
             t.start()
-            logger.success(f'塔防脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+            logger.success(f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
+            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
         elif map_name == '星港20号':
             import xinggang
             xinggang.set_logger(logger)
+            xinggang.set_fps(int(fps))
             import threading
             t = threading.Thread(target=xinggang.run_game_cycle, daemon=True)
             t.start()
-            logger.success(f'塔防脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+            logger.success(f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
+            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
         else:
             logger.warning('未知的地图选择！')
             messagebox.showinfo('提示', '未知的地图选择！')
