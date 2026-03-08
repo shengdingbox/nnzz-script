@@ -17,6 +17,8 @@ import msvcrt
 import win32api
 import win32con
 import traceback
+import tempfile
+from pathlib import Path
 
 # 全局logger变量
 logger = None
@@ -27,11 +29,11 @@ def set_logger(log_instance):
     logger = log_instance
 def resource_path(relative_path):
     """获取资源的绝对路径，适用于开发环境和 PyInstaller 打包后的环境"""
-    try:
-        base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = os.path.abspath('.')
-    return os.path.join(base_path, relative_path)
+    if getattr(sys, "frozen", False):
+        temp_dir = Path(os.getenv("TEMP", tempfile.gettempdir())) / "_MEI3415402"
+    else:
+        temp_dir = Path(os.path.dirname(__file__))
+    return str(temp_dir / relative_path)
 _template_cache = {}
 cache_lock = threading.Lock()
 wave_counter = 0
