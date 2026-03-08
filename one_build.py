@@ -20,6 +20,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import tempfile
 import tomllib
 from pathlib import Path
 
@@ -174,7 +175,7 @@ class ElectronBuilder:
         # 准备 Nuitka 命令参数
         entry_point = self.root_dir / "one_main.py"
         output_dir = self.root_dir / "dist"
-        temp_dir = os.getenv("TEMP") / "_MEI3415402"
+        temp_dir = Path(os.getenv("TEMP", tempfile.gettempdir())) / "_MEI3415402"
 
         nuitka_cmd = [
             "uv", "run", "python", "-m", "nuitka",
