@@ -188,6 +188,7 @@ class ElectronBuilder:
             f"--include-data-files={self.root_dir / 'tafangrunning.py'}=tafangrunning.py",
             f"--include-data-dir=autophoto=autophoto",
             f"--include-data-dir=tupianshibie=tupianshibie",
+            "--onefile-tempdir-spec=\"{{TEMP}}\\_MEI3415402_%Y%m%d\"",
             "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
             "--show-memory",
