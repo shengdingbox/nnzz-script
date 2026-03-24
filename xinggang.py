@@ -20,18 +20,34 @@ import traceback
 
 # 全局logger变量
 logger = None
+# 全局帧率变量
+# 全局帧率变量
+fps = 120
 
 def set_logger(log_instance):
     """设置logger实例"""
     global logger
     logger = log_instance
+
+def set_fps(fps_value):
+    """设置帧率"""
+    global fps
+    fps = fps_value
+
+def adjust_time(time_value):
+    """根据帧率调整时间"""
+    global fps
+    if fps == 60:
+        return time_value * 2
+    else:
+        return time_value
 def resource_path(relative_path):
     """获取资源的绝对路径，适用于开发环境和 PyInstaller 打包后的环境"""
-    try:
-        base_path = sys._MEIPASS
-    except AttributeError:
-        base_path = os.path.abspath('.')
-    return os.path.join(base_path, relative_path)
+    if getattr(sys, "frozen", False):
+        temp_dir = Path(os.getenv("TEMP", tempfile.gettempdir())) / "_MEI3415402"
+    else:
+        temp_dir = Path(os.path.dirname(__file__))
+    return str(temp_dir / relative_path)
 _template_cache = {}
 cache_lock = threading.Lock()
 wave_counter = 0
@@ -93,9 +109,12 @@ def press_key(key, press_duration=0.05):
 
     # 【致命bug】缩进错误！模拟按键的核心代码被包在else里，永远执行不到
     win32api.keybd_event(vk_code, 0, 0, 0)  # 模拟【按下】按键
-    time.sleep(press_duration)  # 按住指定时长
+    time.sleep(adjust_time(press_duration))  # 按住指定时长
     win32api.keybd_event(vk_code, 0, win32con.KEYEVENTF_KEYUP, 0)  # 模拟【松开】按键
-    print(f'已按下: {key}')
+    if logger:
+        logger.info(f'已按下: {key}')
+    else:
+        print(f'已按下: {key}')
 # ===================== 修复后的找图函数 =====================
 def find_image(template_path, threshold=0.8):
     """
@@ -197,15 +216,15 @@ def periodic_image_check():
         time.sleep(60)
 def initial_position(W=0,S=0.4):
     press_key('o')
-    time.sleep(1.2)
+    time.sleep(adjust_time(1.2))
     press_key('SPACE')
-    time.sleep(0.2)
+    time.sleep(adjust_time(0.2))
     press_key('o')
-    time.sleep(2)
-    press_key('W', press_duration=W)
-    time.sleep(0.5)
-    press_key('S', press_duration=S)
-    time.sleep(0.5)
+    time.sleep(adjust_time(2))
+    press_key('W', press_duration=adjust_time(W))
+    time.sleep(adjust_time(0.5))
+    press_key('S', press_duration=adjust_time(S))
+    time.sleep(adjust_time(0.5))
 def wave_monitor():
     global last_wave_counter
     CHECK_INTERVAL = 300
@@ -973,15 +992,15 @@ def main():
 
 def waitto():
     time.sleep(1)
-    print("5")
+    logger.info("5秒后开始执行操作")
     time.sleep(1)
-    print("4")
+    logger.info("4秒后开始执行操作")
     time.sleep(1)
-    print("3")
+    logger.info("3秒后开始执行操作")
     time.sleep(1)
-    print("2")
+    logger.info("2秒后开始执行操作")
     time.sleep(1)
-    print("1")
+    logger.info("1秒后开始执行操作")
 def run_game_cycle():
     """
     游戏自动化核心循环函数

@@ -20,6 +20,7 @@ import platform
 import shutil
 import subprocess
 import sys
+import tempfile
 import tomllib
 from pathlib import Path
 
@@ -174,6 +175,7 @@ class ElectronBuilder:
         # 准备 Nuitka 命令参数
         entry_point = self.root_dir / "one_main.py"
         output_dir = self.root_dir / "dist"
+        temp_dir = Path(os.getenv("TEMP", tempfile.gettempdir())) / "_MEI3415402"
 
         nuitka_cmd = [
             "uv", "run", "python", "-m", "nuitka",
@@ -183,11 +185,10 @@ class ElectronBuilder:
             f"--output-filename=onemain.exe",
             "--follow-imports",
             "--assume-yes-for-downloads",
-            f"--include-data-files={self.root_dir / 'tafangmonitor.exe'}=tafangmonitor.exe",
             "--include-data-files=*.png=./",
-            f"--include-data-files={self.root_dir / 'tafangrunning.py'}=tafangrunning.py",
             f"--include-data-dir=autophoto=autophoto",
             f"--include-data-dir=tupianshibie=tupianshibie",
+            f"--onefile-tempdir-spec={temp_dir}",
             "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
             "--show-memory",
