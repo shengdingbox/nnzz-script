@@ -8,4 +8,7 @@ setup(
         "encode.py",
         compiler_directives={"language_level": "3"},
     ),
+    install_requires=[
+        "cryptography",
+    ],
 )
