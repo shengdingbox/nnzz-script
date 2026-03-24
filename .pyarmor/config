@@ -1,0 +1,4 @@
+[project]
+src = D:\python\2.3\pydemo
+scripts = main.py
+

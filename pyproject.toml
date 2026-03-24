@@ -3,7 +3,7 @@ name = "2-3"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "cryptography>=46.0.5",
     "nuitka>=4.0.1",
