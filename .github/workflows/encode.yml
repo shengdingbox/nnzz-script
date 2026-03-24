@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false          # 某个任务失败不影响其他
       matrix:
         os: [windows-latest, macos-latest, macos-13]
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
@@ -22,14 +23,18 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+          allow-prereleases: false
+        timeout-minutes: 10      # 超时自动失败，避免卡死
       
       - name: Install dependencies
         run: |
           pip install cython setuptools wheel build
+        timeout-minutes: 5
       
       - name: Build wheel
         run: |
           python setup.py bdist_wheel
+        timeout-minutes: 10
       
       - name: Upload wheels
         uses: actions/upload-artifact@v4
