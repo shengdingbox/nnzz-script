@@ -185,8 +185,7 @@ class ElectronBuilder:
             f"--output-filename=onemain.exe",
             "--follow-imports",
             "--assume-yes-for-downloads",
-            "--include-data-files=*.png=./",
-            f"--include-data-dir=autophoto=photo",
+            f"--include-data-dir=photo=photo",
             f"--onefile-tempdir-spec={temp_dir}",
             "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
