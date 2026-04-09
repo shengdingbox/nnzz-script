@@ -318,7 +318,7 @@ def main():
 
     ttk.Label(map_grid, text='选择地图：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=5)
     map_var = tk.StringVar(value='请选择地图')
-    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '联盟大厦', '星港20号'], state='readonly', width=18)
+    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '联盟大厦', '星港20号','联盟大厦KM'], state='readonly', width=18)
     map_combobox.pack(side=tk.LEFT, padx=5)
 
     ttk.Label(map_grid, text='帧率：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=(15, 5))
@@ -487,6 +487,15 @@ def start_script(license_valid, map_name, fps):
             t.start()
             logger.success(f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
             messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
+        elif map_name == '联盟大厦KM':
+            import tafangrunningkm
+            tafangrunningkm.set_logger(logger)
+            tafangrunningkm.set_fps(int(fps))
+            import threading
+            t = threading.Thread(target=tafangrunningkm.run_game_cycle, daemon=True)
+            t.start()
+            logger.success(f'塔防tafangrunningkm脚本启动成功！地图：{map_name}，帧率：{fps}')
+            messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}，帧率：{fps}')
         else:
             logger.warning('未知的地图选择！')
             messagebox.showinfo('提示', '未知的地图选择！')
