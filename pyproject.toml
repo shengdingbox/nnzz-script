@@ -1,0 +1,25 @@
+[project]
+name = "2-3"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "cryptography>=46.0.5",
+    "nuitka>=4.0.1",
+    "opencv-python>=4.13.0.92",
+    "pillow>=12.1.1",
+    "psutil>=7.2.2",
+    "pyarmor>=9.2.3",
+    "pyautogui>=0.9.54",
+    "pyinstaller>=6.19.0",
+    "pyperclip>=1.11.0",
+    "pysimplegui>=5.0.8.3",
+    "pywin32>=311",
+    "requests>=2.32.5",
+    "screeninfo>=0.8.1",
+]
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true
