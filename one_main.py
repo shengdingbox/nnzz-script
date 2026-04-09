@@ -307,7 +307,7 @@ def main():
 
     ttk.Label(map_grid, text='选择地图：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=5)
     map_var = tk.StringVar(value='请选择地图')
-    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '联盟大厦', '星港20号','联盟大厦KM'], state='readonly', width=18)
+    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '星港20号S2', '蔷薇庄园歼灭者S2','蔷薇庄园天启S2'], state='readonly', width=18)
     map_combobox.pack(side=tk.LEFT, padx=5)
 
     # 功能按钮区域（右栏）
