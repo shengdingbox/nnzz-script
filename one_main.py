@@ -218,7 +218,7 @@ def main():
     # 设置样式
     style = ttk.Style()
     style.theme_use('clam')
-    
+
     # 定义颜色方案
     bg_color = '#2c3e50'
     fg_color = '#ecf0f1'
@@ -226,7 +226,7 @@ def main():
     success_color = '#27ae60'
     warning_color = '#f39c12'
     error_color = '#e74c3c'
-    
+
     # 配置样式
     style.configure('TFrame', background=bg_color)
     style.configure('TLabel', background=bg_color, foreground=fg_color, font=('Microsoft YaHei UI', 10))
@@ -235,10 +235,10 @@ def main():
     style.configure('TLabelframe.Label', background=bg_color, foreground=accent_color, font=('Microsoft YaHei UI', 11, 'bold'))
     style.configure('TCombobox', fieldbackground='#34495e', background='#34495e', foreground=fg_color, font=('Microsoft YaHei UI', 10))
     style.configure('TEntry', fieldbackground='#34495e', foreground=fg_color, font=('Microsoft YaHei UI', 10))
-    
+
     # 按钮样式
     style.map('TButton', background=[('active', '#ecf0f1'), ('pressed', '#bdc3c7')], foreground=[('active', '#2c3e50'), ('pressed', '#2c3e50')])
-    
+
     root.configure(bg=bg_color)
 
     # 创建主框架
@@ -321,17 +321,12 @@ def main():
     map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图', '联盟大厦', '星港20号','联盟大厦KM'], state='readonly', width=18)
     map_combobox.pack(side=tk.LEFT, padx=5)
 
-    ttk.Label(map_grid, text='帧率：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=(15, 5))
-    fps_var = tk.StringVar(value='请选择')
-    fps_combobox = ttk.Combobox(map_grid, textvariable=fps_var, values=['请选择', '120', '60'], state='readonly', width=10)
-    fps_combobox.pack(side=tk.LEFT, padx=5)
-
     # 功能按钮区域（右栏）
     button_frame = ttk.Frame(right_column)
     button_frame.pack(fill=tk.X, pady=(0, 15))
 
     # 启动按钮
-    start_button = ttk.Button(button_frame, text='🚀 启动塔防脚本 (F2)', command=lambda: start_script(license_valid, map_var.get(), fps_var.get()))
+    start_button = ttk.Button(button_frame, text='🚀 启动塔防脚本 (F2)', command=lambda: start_script(license_valid, map_var.get()))
     start_button.pack(side=tk.LEFT, padx=8, pady=5)
     start_button.state(['disabled'] if not license_valid else [])
 
@@ -369,7 +364,7 @@ def main():
             from datetime import datetime
             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log_message = f"[{timestamp}] {message}\n"
-            
+
             if tag:
                 self.text_widget.insert(tk.END, log_message, tag)
             else:
@@ -408,7 +403,7 @@ def main():
     # 快捷键处理
     def on_key_press(event):
         if event.keysym == 'F2':
-            start_script(license_valid, map_var.get(), fps_var.get())
+            start_script(license_valid, map_var.get())
         elif event.keysym == 'F10':
             stop_script(license_valid,root)
 
@@ -452,50 +447,52 @@ def activate_code(input_code, hwid, root):
         logger.error('激活失败：激活码无效、已过期（30分钟内有效）或不匹配本机！')
         messagebox.showinfo('激活失败', '激活码无效、已过期（30分钟内有效）或不匹配本机！')
 
-def start_script(license_valid, map_name, fps):
+def start_script(license_valid, map_name):
     if not license_valid:
         logger.warning('未激活/授权已到期，无法启动脚本！')
         messagebox.showinfo('提示', '未激活/授权已到期，无法启动脚本！')
         return
-    
+
     if map_name == '请选择地图':
         logger.warning('请先选择地图！')
         messagebox.showinfo('提示', '请先选择地图！')
         return
-    
-    if fps == '请选择':
-        logger.warning('请先选择帧率！')
-        messagebox.showinfo('提示', '请先选择帧率！')
-        return
-    
+
     try:
-        if map_name == '联盟大厦':
-            import tafangrunning
-            tafangrunning.set_logger(logger)
-            tafangrunning.set_fps(int(fps))
+        if map_name == '联盟大厦S2':
+            import dasha
+            dasha.set_logger(logger)
             import threading
-            t = threading.Thread(target=tafangrunning.run_game_cycle, daemon=True)
+            t = threading.Thread(target=dasha.run_game_cycle, daemon=True)
             t.start()
-            logger.success(f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
-            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
-        elif map_name == '星港20号':
+            logger.success(f'塔防脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+        elif map_name == '星港20号S2':
             import xinggang
             xinggang.set_logger(logger)
-            xinggang.set_fps(int(fps))
             import threading
             t = threading.Thread(target=xinggang.run_game_cycle, daemon=True)
             t.start()
-            logger.success(f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
-            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}，帧率：{fps}')
-        elif map_name == '联盟大厦KM':
+            logger.success(f'塔防脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+        # elif map_name == '联盟大厦KM':
+        #     import tafangrunningkm
+        #     tafangrunningkm.set_logger(logger)
+        #     tafangrunningkm.set_fps(int(fps))
+        #     import threading
+        #     t = threading.Thread(target=tafangrunningkm.run_game_cycle, daemon=True)
+        #     t.start()
+        #     logger.success(f'塔防tafangrunningkm脚本启动成功！地图：{map_name}，帧率：{fps}')
+        #     messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}，帧率：{fps}')
+        elif map_name == '蔷薇S2':
             import tafangrunningkm
             tafangrunningkm.set_logger(logger)
             tafangrunningkm.set_fps(int(fps))
             import threading
             t = threading.Thread(target=tafangrunningkm.run_game_cycle, daemon=True)
             t.start()
-            logger.success(f'塔防tafangrunningkm脚本启动成功！地图：{map_name}，帧率：{fps}')
-            messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}，帧率：{fps}')
+            logger.success(f'塔防tafangrunningkm脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}')
         else:
             logger.warning('未知的地图选择！')
             messagebox.showinfo('提示', '未知的地图选择！')

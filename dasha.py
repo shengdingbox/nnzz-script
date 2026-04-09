@@ -6,17 +6,16 @@
 global wave_counter
 global last_wave_counter
 global wave_lock
-import sys
 import os
+import sys
+import threading
 import time
+
 import cv2
 import numpy as np
-from PIL import ImageGrab
-import threading
-import msvcrt
 import win32api
 import win32con
-import traceback
+from PIL import ImageGrab
 
 
 def set_logger(log_instance):
