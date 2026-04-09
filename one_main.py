@@ -16,17 +16,15 @@ import base64
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+import ctypes
+import sys
 
 # 常量定义
-TASK_EXE_NAME = 'tafangrunning.exe'
 SECRET_KEY = 'sd_secure_2026_custom_888'
 SALT = b'shengding_t_2026_secure_888_xyz_123'
 ITERATIONS = 100000
-DATE_FORMAT = '%Y%m%d'
-DISPLAY_DATE_FORMAT = '%Y-%m-%d'
 REG_PATH = 'Software\\ShengDingAssistant_Pro'
 REG_KEY = 'SD_LICENSE_DATA'
-ACTIVATE_CODE_EXPIRE_MINUTES = 30
 SUPPORT_DAYS = {'1小时': 1/24, '3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
 CHECK_INTERVAL = 60
 
@@ -120,10 +118,6 @@ def is_license_valid():
             except:
                 return False
 
-def get_today_hash():
-    today_raw = datetime.now().strftime(DATE_FORMAT)
-    return hashlib.sha256(today_raw.encode()).hexdigest()[:16].upper()
-
 def get_hwid():
     """生成本机唯一机器码（16位）"""
     try:
@@ -145,30 +139,16 @@ def get_hwid():
         # 异常情况下使用不同的随机数生成方式
         return hashlib.sha1(os.urandom(32)).hexdigest()[:16].upper()
 
-def get_time_token():
-    now = datetime.now()
-    return now.strftime('%Y%m%d%H') + f'{now.minute // ACTIVATE_CODE_EXPIRE_MINUTES}'
-
 def make_activate_code(hwid, days):
-    today_hash = get_today_hash()
-    time_token = get_time_token()
-    raw_str = f'{today_hash}|{hwid}|{days}|{time_token}|{SECRET_KEY}'
+    raw_str = f'{hwid}|{days}|{SECRET_KEY}'
     return hashlib.sha256(raw_str.encode()).hexdigest()[:16].upper()
 
 def verify_activate_code(hwid, input_code):
-    today_hash = get_today_hash()
-    now = datetime.now()
-    valid_tokens = set()
-    for minute_delta in range(0, ACTIVATE_CODE_EXPIRE_MINUTES + 1):
-        check_time = now - timedelta(minutes=minute_delta)
-        token = check_time.strftime('%Y%m%d%H') + f'{check_time.minute // ACTIVATE_CODE_EXPIRE_MINUTES}'
-        valid_tokens.add(token)
     for days_name, days_value in SUPPORT_DAYS.items():
-        for token in valid_tokens:
-            raw_str = f'{today_hash}|{hwid}|{days_value}|{token}|{SECRET_KEY}'
-            valid_code = hashlib.sha256(raw_str.encode()).hexdigest()[:16].upper()
-            if input_code == valid_code:
-                return days_value
+        raw_str = f'{hwid}|{days_value}|{SECRET_KEY}'
+        valid_code = hashlib.sha256(raw_str.encode()).hexdigest()[:16].upper()
+        if input_code == valid_code:
+            return days_value
     return None
 
 def kill_process_by_name(process_name):
@@ -193,19 +173,28 @@ class LicenseWatchdog(threading.Thread):
             if not is_license_valid():
                 # 直接终止脚本
                 # 由于我们不再使用tafangmonitor.exe，只需要终止任务进程
-                kill_process_by_name(TASK_EXE_NAME)
                 logger.warning('授权已到期，脚本已终止！')
                 break
 
-def stop_all_scripts_silent():
-    """静默终止所有脚本，无弹窗、无界面更新"""
-    # 由于我们不再使用tafangmonitor.exe，只需要终止任务进程
-    kill_process_by_name(TASK_EXE_NAME)
+def is_admin():
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except:
+        return False
 
 def main():
+    if not is_admin():
+        ctypes.windll.shell32.ShellExecuteW(
+            None,
+            "runas",                # 请求管理员权限
+            sys.executable,        # python.exe
+            " ".join(sys.argv),    # 当前参数
+            None,
+            1
+        )
+        sys.exit()
     # 初始化数据
     hwid = get_hwid()
-    today_raw = datetime.now().strftime(DISPLAY_DATE_FORMAT)
     license_valid = is_license_valid()
     license_data = load_license() if license_valid else None
 
@@ -411,7 +400,7 @@ def main():
 
     # 窗口关闭处理
     def on_closing():
-        stop_all_scripts_silent()
+        # stop_all_scripts_silent()
         root.destroy()
 
     root.protocol('WM_DELETE_WINDOW', on_closing)
@@ -484,15 +473,22 @@ def start_script(license_valid, map_name):
         #     t.start()
         #     logger.success(f'塔防tafangrunningkm脚本启动成功！地图：{map_name}，帧率：{fps}')
         #     messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}，帧率：{fps}')
-        elif map_name == '蔷薇S2':
-            import tafangrunningkm
-            tafangrunningkm.set_logger(logger)
-            tafangrunningkm.set_fps(int(fps))
+        elif map_name == '蔷薇庄园歼灭者S2':
+            import  zhuangyuanjm
+            zhuangyuanjm.set_logger(logger)
             import threading
-            t = threading.Thread(target=tafangrunningkm.run_game_cycle, daemon=True)
+            t = threading.Thread(target=zhuangyuanjm.run_game_cycle, daemon=True)
             t.start()
-            logger.success(f'塔防tafangrunningkm脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}')
+            logger.success(f'塔防z脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
+        elif map_name == '蔷薇庄园天启S2':
+            import  zhuangyuantq
+            zhuangyuantq.set_logger(logger)
+            import threading
+            t = threading.Thread(target=zhuangyuantq.run_game_cycle, daemon=True)
+            t.start()
+            logger.success(f'塔防z脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
         else:
             logger.warning('未知的地图选择！')
             messagebox.showinfo('提示', '未知的地图选择！')

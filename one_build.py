@@ -186,8 +186,7 @@ class ElectronBuilder:
             "--follow-imports",
             "--assume-yes-for-downloads",
             "--include-data-files=*.png=./",
-            f"--include-data-dir=autophoto=autophoto",
-            f"--include-data-dir=tupianshibie=tupianshibie",
+            f"--include-data-dir=autophoto=photo",
             f"--onefile-tempdir-spec={temp_dir}",
             "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--show-progress",
