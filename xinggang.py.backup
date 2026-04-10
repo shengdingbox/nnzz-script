@@ -443,37 +443,37 @@ def main():
                                 if result:
                                     xinit, yinit, similarity = result
                                     if 800 < xinit < 850 and 740 < yinit < 790:
-                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                        press_key('6')
-                                        time.sleep(0.5)
-                                        click_at(xinit + 132, yinit - 78, button='left', delay=0.1)
-                                        time.sleep(0.5)
-                                        xbase = xinit - 39
-                                        ybase = yinit - 589
-                                        press_key('4')
-                                        time.sleep(0.5)
-                                        indexes = [0, 1, 2, 3]
-                                        for idx in indexes:
-                                            x = xbase - 43 - 85 * idx
-                                            y = ybase + 43
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                        for idx in indexes:
-                                            x = xbase - 43 - 85 * idx
-                                            y = ybase + 43 + 85
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                        for idx in indexes:
-                                            x = xbase + 340 + 43 + 85 * idx
-                                            y = ybase + 43
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                        for idx in indexes:
-                                            x = xbase + 340 + 43 + 85 * idx
-                                            y = ybase + 43 + 85
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                        time.sleep(10)
+                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                    press_key('6')
+                                                    time.sleep(0.5)
+                                                    click_at(xinit + 132, yinit - 78, button='left', delay=0.1)
+                                                    time.sleep(0.5)
+                                                    xbase = xinit - 39
+                                                    ybase = yinit - 589
+                                                    press_key('4')
+                                                    time.sleep(0.5)
+                                                    indexes = [0, 1, 2, 3]
+                                                    for idx in indexes:
+                                                        x = xbase - 43 - 85 * idx
+                                                        y = ybase + 43
+                                                        click_at(x, y, button='left', delay=0.1)
+                                                        time.sleep(0.1)
+                                                    for idx in indexes:
+                                                        x = xbase - 43 - 85 * idx
+                                                        y = ybase + 43 + 85
+                                                        click_at(x, y, button='left', delay=0.1)
+                                                        time.sleep(0.1)
+                                                    for idx in indexes:
+                                                        x = xbase + 340 + 43 + 85 * idx
+                                                        y = ybase + 43
+                                                        click_at(x, y, button='left', delay=0.1)
+                                                        time.sleep(0.1)
+                                                    for idx in indexes:
+                                                        x = xbase + 340 + 43 + 85 * idx
+                                                        y = ybase + 43 + 85
+                                                        click_at(x, y, button='left', delay=0.1)
+                                                        time.sleep(0.1)
+                                                    time.sleep(10)
                                                     wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
                                                     with wave_lock:
                                                         wave_counter += 1
@@ -492,15 +492,15 @@ def main():
                                                         if result:
                                                             xinit, yinit, similarity = result
                                                             if 620 < xinit < 660 and 400 < yinit < 480:
-                                                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                xbase = xinit + 58
-                                                                ybase = yinit + 57
-                                                                time.sleep(0.5)
-                                                                press_key('5')
-                                                                time.sleep(0.5)
-                                                                click_at(xbase - 425, ybase - 85, button='left', delay=0.1)
-                                                                time.sleep(0.5)
-                                                                click_at(xbase + 510 + 425, ybase - 85, button='left', delay=0.1)
+                                                                            print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                            xbase = xinit + 58
+                                                                            ybase = yinit + 57
+                                                                            time.sleep(0.5)
+                                                                            press_key('5')
+                                                                            time.sleep(0.5)
+                                                                            click_at(xbase - 425, ybase - 85, button='left', delay=0.1)
+                                                                            time.sleep(0.5)
+                                                                            click_at(xbase + 510 + 425, ybase - 85, button='left', delay=0.1)
                                                                             time.sleep(0.5)
                                                                             press_key('7')
                                                                             time.sleep(0.5)
@@ -572,14 +572,14 @@ def main():
                                                                                 if result:
                                                                                     xinit, yinit, similarity = result
                                                                                     if 800 < xinit < 850 and 740 < yinit < 790:
-                                                                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                        time.sleep(0.5)
-                                                                                        press_key('4')
-                                                                                        time.sleep(0.5)
-                                                                                        xbase = xinit - 39
-                                                                                        ybase = yinit - 589
-                                                                                        indexes = [0, 1, 2, 3]
-                                                                                        for idx in indexes:
+                                                                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                    time.sleep(0.5)
+                                                                                                    press_key('4')
+                                                                                                    time.sleep(0.5)
+                                                                                                    xbase = xinit - 39
+                                                                                                    ybase = yinit - 589
+                                                                                                    indexes = [0, 1, 2, 3]
+                                                                                                    for idx in indexes:
                                                                                                         x = xbase - 43 - 85 * idx
                                                                                                         y = ybase + 43
                                                                                                         click_at(x, y, button='left', delay=0.1)
@@ -708,14 +708,14 @@ def main():
                                                                                                                                             if result:
                                                                                                                                                 xinit, yinit, similarity = result
                                                                                                                                                 if 620 < xinit < 660 and 280 < yinit < 350:
-                                                                                                                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                                                    time.sleep(0.5)
-                                                                                                                                                    press_key('5')
-                                                                                                                                                    time.sleep(0.5)
-                                                                                                                                                    xbase = xinit + 58 + 255
-                                                                                                                                                    ybase = yinit + 57
-                                                                                                                                                    indexes = [(-1), 1]
-                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                press_key('5')
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                xbase = xinit + 58 + 255
+                                                                                                                                                                ybase = yinit + 57
+                                                                                                                                                                indexes = [(-1), 1]
+                                                                                                                                                                for idx in indexes:
                                                                                                                                                                     x = xbase - 510 * idx
                                                                                                                                                                     y = ybase - 85
                                                                                                                                                                     click_at(x, y, button='left', delay=0.1)
@@ -749,15 +749,15 @@ def main():
                                                                                                                                                                     if result:
                                                                                                                                                                         xinit, yinit, similarity = result
                                                                                                                                                                         if 800 < xinit < 860 and 360 < yinit < 420:
-                                                                                                                                                                            print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
                                                                                                                                                                                         
-                                                                                                                                                                            xbase = xinit + 132
-                                                                                                                                                                            ybase = yinit + 6
-                                                                                                                                                                            time.sleep(0.5)
-                                                                                                                                                                            press_key('6')
-                                                                                                                                                                            time.sleep(0.5)
-                                                                                                                                                                            click_at(xbase, ybase - 85, button='left', delay=0.1)
-                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                        xbase = xinit + 132
+                                                                                                                                                                                        ybase = yinit + 6
+                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                        press_key('6')
+                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                        click_at(xbase, ybase - 85, button='left', delay=0.1)
+                                                                                                                                                                                        time.sleep(0.1)
                                                                                                                                                                                         click_at(xbase, ybase - 85 - 10, button='left', delay=0.1)
                                                                                                                                                                                         time.sleep(0.1)
                                                                                                                                                                                         click_at(xbase, ybase - 10, button='right', delay=0.1)
@@ -784,14 +784,14 @@ def main():
                                                                                                                                                                                             if result:
                                                                                                                                                                                                 xinit, yinit, similarity = result
                                                                                                                                                                                                 if 800 < xinit < 850 and 740 < yinit < 790:
-                                                                                                                                                                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                                                                                                    time.sleep(0.5)
-                                                                                                                                                                                                    press_key('4')
-                                                                                                                                                                                                    time.sleep(0.5)
-                                                                                                                                                                                                    xbase = xinit - 39
-                                                                                                                                                                                                    ybase = yinit - 589
-                                                                                                                                                                                                    indexes = [0, 1, 2, 3]
-                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                press_key('4')
+                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                xbase = xinit - 39
+                                                                                                                                                                                                                ybase = yinit - 589
+                                                                                                                                                                                                                indexes = [0, 1, 2, 3]
+                                                                                                                                                                                                                for idx in indexes:
                                                                                                                                                                                                                     x = xbase - 43 - 85 * idx
                                                                                                                                                                                                                     y = ybase + 43
                                                                                                                                                                                                                     click_at(x, y, button='left', delay=0.1)

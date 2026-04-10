@@ -307,7 +307,7 @@ def main():
 
     ttk.Label(map_grid, text='选择地图：', font=('Microsoft YaHei UI', 10, 'bold')).pack(side=tk.LEFT, padx=5)
     map_var = tk.StringVar(value='请选择地图')
-    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图','联盟大厦S2', '星港20号S2', '蔷薇庄园歼灭者S2','蔷薇庄园天启S2'], state='readonly', width=18)
+    map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图','联盟大厦S2', '星港20号S2', '蔷薇庄园歼灭者S2','蔷薇庄园天启S2','蔷薇庄园歼灭者cS2'], state='readonly', width=18)
     map_combobox.pack(side=tk.LEFT, padx=5)
 
     # 功能按钮区域（右栏）
@@ -478,6 +478,13 @@ def start_script(license_valid, map_name):
             zhuangyuanjm.set_logger(logger)
             import threading
             t = threading.Thread(target=zhuangyuanjm.run_game_cycle, daemon=True)
+            t.start()
+            logger.success(f'塔防z脚本启动成功！地图：{map_name}')
+            messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
+        elif map_name == '蔷薇庄园歼灭者cS2':
+            import  zhuangyuanjmc
+            import threading
+            t = threading.Thread(target=zhuangyuanjmc.run_game_cycle, daemon=True)
             t.start()
             logger.success(f'塔防z脚本启动成功！地图：{map_name}')
             messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
