@@ -16,12 +16,10 @@ AutoGLM-GUI Electron 一键构建脚本
 
 import argparse
 import os
-import platform
 import shutil
 import subprocess
 import sys
 import tempfile
-import tomllib
 from pathlib import Path
 
 # 修复 Windows 编码问题
@@ -110,17 +108,6 @@ def check_command(cmd: str) -> bool:
         return True
     except (subprocess.CalledProcessError, FileNotFoundError):
         return False
-
-
-def get_backend_version(root_dir: Path) -> str:
-    """读取后端版本号（用于前端构建注入）。"""
-    pyproject_path = root_dir / "pyproject.toml"
-    try:
-        with pyproject_path.open("rb") as file:
-            data = tomllib.load(file)
-        return str(data.get("project", {}).get("version") or "unknown")
-    except Exception:
-        return "unknown"
 
 
 class ElectronBuilder:
