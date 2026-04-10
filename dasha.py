@@ -191,12 +191,12 @@ def restart_game():
                 time.sleep(0.5)
             click_at(1454, 220, button='left')
             os._exit(1)
-        result = find_image(resource_path('photo/lianyukaishi.png'), 0.7)
+        result = find_image(resource_path('photo/dslianyukaishi.png'), 0.7)
         if result:
             print('识别到炼狱开始')
             click_at(1454, 220, button='left')
             os._exit(1)
-        result = find_image(resource_path('photo/tiaozhanmoshi.png'), 0.7)
+        result = find_image(resource_path('photo/dstiaozhanmoshi.png'), 0.7)
         if result:
             print('识别到挑战模式')
             os._exit(1)
@@ -207,12 +207,12 @@ def restart_game():
             time.sleep(3)
             click_at(521, 502, button='left')
             time.sleep(3)
-            result = find_image(resource_path('photo/lianyukaishi.png'), 0.7)
+            result = find_image(resource_path('photo/dslianyukaishi.png'), 0.7)
             if result:
                 print('识别到炼狱开始')
                 click_at(1454, 220, button='left')
                 os._exit(1)
-            result = find_image(resource_path('photo/tiaozhanmoshi.png'), 0.7)
+            result = find_image(resource_path('photo/dstiaozhanmoshi.png'), 0.7)
             if result:
                 print('识别到挑战模式')
                 os._exit(1)
@@ -220,12 +220,12 @@ def restart_game():
         time.sleep(10)
         print('自检未检测到')
 def traverse():
-    result = find_image(resource_path('photo/lianyukaishi.png'), 0.7)
+    result = find_image(resource_path('photo/dslianyukaishi.png'), 0.7)
     if result:
         print('识别到炼狱开始')
         return True
     else:
-        result = find_image(resource_path('photo/tiaozhanmoshi.png'), 0.7)
+        result = find_image(resource_path('photo/dstiaozhanmoshi.png'), 0.7)
         if result:
             print('识别到挑战模式')
             click_at(1454, 220, button='left')
@@ -236,11 +236,11 @@ def traverse():
             time.sleep(3)
             click_at(521, 502, button='left')
             time.sleep(3)
-            result = find_image(resource_path('photo/lianyukaishi.png'), 0.7)
+            result = find_image(resource_path('photo/dslianyukaishi.png'), 0.7)
             if result:
                 print('识别到炼狱开始')
                 click_at(1688, 954, button='left')
-            result = find_image(resource_path('photo/tiaozhanmoshi.png'), 0.7)
+            result = find_image(resource_path('photo/dstiaozhanmoshi.png'), 0.7)
             if result:
                 print('识别到挑战模式')
         result = find_image(resource_path('photo/shibai.png'), 0.7)
@@ -250,7 +250,7 @@ def traverse():
                 press_key('SPACE')
                 time.sleep(0.5)
             click_at(1454, 220, button='left')
-        result = find_image(resource_path('photo/buzaitixing.png'), threshold=0.75)
+        result = find_image(resource_path('photo/dsbuzaitixing.png'), threshold=0.75)
         if result:
             time.sleep(1)
             click_at(899, 598, button='left')
@@ -1016,7 +1016,7 @@ def run_game_cycle():
         time.sleep(0.5)
         click_at(1688, 954, button='left')
         time.sleep(0.5)
-        result = find_image(resource_path('photo/buzaitixing.png'), threshold=0.75)
+        result = find_image(resource_path('photo/dsbuzaitixing.png'), threshold=0.75)
         if result:
             time.sleep(1)
             click_at(899, 598, button='left')
