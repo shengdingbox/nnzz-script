@@ -1,18 +1,28 @@
-global wave_counter
+# Decompiled with PyLingual (https://pylingual.io)
+# Internal filename: 'photo.py'
+# Bytecode version: 3.10.b1 (3439)
+# Source timestamp: 1970-01-01 00:00:00 UTC (0)
+
 global last_wave_counter
 global wave_lock
-import sys
+global wave_counter
 import os
+import sys
+import threading
 import time
+
 import cv2
 import numpy as np
-from PIL import ImageGrab
-import threading
-import msvcrt
 import win32api
 import win32con
-import traceback
-from win32comext.propsys.pscon import PKEY_Photo_FocalPlaneXResolution
+from PIL import ImageGrab
+
+
+def set_logger(log_instance):
+    """设置logger实例"""
+    global logger
+    logger = log_instance
+    
 def resource_path(relative_path):
     """获取资源的绝对路径，适用于开发环境和 PyInstaller 打包后的环境"""
     try:
@@ -136,7 +146,6 @@ def find_image(template_path, threshold=0.8):
         else:
             print(f'找图失败，错误信息: {str(e)}')
         return None
-
 def click_at(x, y, button='left', delay=0.1):
     win32api.SetCursorPos((x, y))
     time.sleep(0.05)
@@ -167,7 +176,7 @@ def wait_for_image(template_path, threshold=0.75, check_interval=1.0, Afterrecog
         else:
             time.sleep(check_interval)
 def periodic_image_check():
-    target_image = resource_path('xinggang/guajijiance.png')
+    target_image = resource_path('photo/guajijiance.png')
     threshold = 0.7
     while True:
         result = find_image(target_image, threshold)
@@ -322,7 +331,7 @@ def main():
         print(f'✅ 找到图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
         click_at(x, y, button='left')
     time.sleep(0.5)
-    image_path = resource_path('photo/tianqi.png')
+    image_path = resource_path('photo/jianmie.png')
     result = find_image(image_path, threshold=0.6)
     if result:
         x, y, similarity = result
@@ -452,8 +461,6 @@ def main():
     click_at(xinit + 467, yinit - 174, button='left', delay=0.1)
     time.sleep(0.5)
     click_at(xinit + 467, yinit - 174, button='left', delay=0.1)
-    time.sleep(0.5)
-    click_at(xinit + 467, yinit - 174, button='left', delay=0.1)
     initial_positionscoll(W=0, S=0, A=0, D=2)
     initial_positionscoll(W=0, S=0, A=1, D=0)
     time.sleep(0.5)
@@ -491,11 +498,11 @@ def main():
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
     press_key('5')
-    time.sleep(8)
-    for i in range(30):
+    time.sleep(10)
+    for i in range(10):
         click_at(xinit - 471, yinit - 169, button='left', delay=0.1)
-        time.sleep(0.2)
-    wait_for_image(resource_path('zhuangyuan/BOCIERWANCHENG.png'), threshold=0.75)
+        time.sleep(0.5)
+    wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
     with wave_lock:
         wave_counter += 1
         print(f'当前完成波次: {wave_counter}')
@@ -528,10 +535,14 @@ def main():
         time.sleep(0.1)
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
+        click_at(x, y, button='left', delay=0.1)
+        time.sleep(0.1)
     indexes = [0, 1, 2, 3]
     for idx in indexes:
         x = xbase + 320
         y = ybase + 64 * idx
+        click_at(x, y, button='left', delay=0.1)
+        time.sleep(0.1)
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
         click_at(x, y, button='left', delay=0.1)
@@ -546,10 +557,14 @@ def main():
         time.sleep(0.1)
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
+        click_at(x, y, button='left', delay=0.1)
+        time.sleep(0.1)
     indexes = [0, 1, 2, 3]
     for idx in indexes:
         x = xbase - 320
         y = ybase + 64 * idx
+        click_at(x, y, button='left', delay=0.1)
+        time.sleep(0.1)
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
         click_at(x, y, button='left', delay=0.1)
@@ -586,13 +601,13 @@ def main():
     time.sleep(0.5)
     initial_positionscoll(W=0, S=0, A=1, D=0)
     time.sleep(0.5)
-    image_path = resource_path('photo/0022.png')
-    result = find_image(image_path, threshold=0.7)
-    if result:
-        pass
-    xinit, yinit, similarity = result
-    if 1650 < xinit < 1750 and 650 < yinit < 750:
-        pass
+image_path = resource_path('photo/0022.png')
+result = find_image(image_path, threshold=0.7)
+if result:
+    pass
+xinit, yinit, similarity = result
+if 1650 < xinit < 1750 and 650 < yinit < 750:
+    pass
     print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
     xbase = xinit - 571
     ybase = yinit - 329
@@ -600,21 +615,21 @@ def main():
     time.sleep(0.5)
     press_key('E')
     time.sleep(0.2)
-    initial_positionscoll(W=0, S=0.8, A=0, D=0.4)
-            initial_positionscoll(W=0, S=0, A=0, D=2)
-            time.sleep(0.5)
-            initial_positionscoll(W=0, S=0, A=0, D=2)
-            time.sleep(0.5)
-        image_path = resource_path('zhuangyuan/3041.png')
-        result = find_image(image_path, threshold=0.7)
-        if result:
-            pass
-        xinit, yinit, similarity = result
-        if 1100 < xinit < 1200 and 400 < yinit < 500:
-            pass
+    initial_positionscoll(W=0, S=0.8, A=0, D=0.5)
+    initial_positionscoll(W=0, S=0, A=0, D=2)
+    time.sleep(0.5)
+    initial_positionscoll(W=0, S=0, A=0, D=2)
+    time.sleep(0.5)
+    image_path = resource_path('photo/2041.png')
+    result = find_image(image_path, threshold=0.7)
+    if result:
+        pass
+    xinit, yinit, similarity = result
+    if 650 < xinit < 750 and 400 < yinit < 500:
+        pass
     print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-    xbase = xinit + 53 - 375
-    ybase = yinit + 1 + 32
+    xbase = xinit + 53
+    ybase = yinit + 1
     time.sleep(0.5)
     press_key('4')
     time.sleep(0.5)
@@ -775,17 +790,17 @@ def main():
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
     initial_positionscoll(W=0, S=0, A=0, D=0.5)
-            initial_positionscoll(W=0, S=0.8, A=0, D=0.4)
-            time.sleep(0.5)
-            initial_positionscoll(W=0, S=0.8, A=0, D=0.4)
-            time.sleep(0.5)
-        image_path = resource_path('zhuangyuan/0031.png')
-        result = find_image(image_path, threshold=0.7)
-        if result:
-            pass
-        xinit, yinit, similarity = result
-        if 1300 < xinit < 1400 and 60 < yinit < 160:
-            pass
+    initial_positionscoll(W=0, S=0.8, A=0, D=0.5)
+    time.sleep(0.5)
+    initial_positionscoll(W=0, S=0.8, A=0, D=0.5)
+    time.sleep(0.5)
+    image_path = resource_path('photo/0031.png')
+    result = find_image(image_path, threshold=0.7)
+    if result:
+        pass
+    xinit, yinit, similarity = result
+    if 1300 < xinit < 1400 and 60 < yinit < 160:
+        pass
     print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
     xbase = xinit - 1019
     ybase = yinit + 281
@@ -1256,6 +1271,7 @@ def main():
     if 1300 < xinit < 1400 and 60 < yinit < 160:
         pass
     print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+    #todo  break
     xbase = xinit - 1019
     ybase = yinit + 281
     press_key('2')
@@ -1341,7 +1357,7 @@ def main():
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
     for idx in indexes:
-        x = xbase + 64 + 128 * idx
+        x = xbase + 448 + 128 * idx
         y = ybase + 192
         click_at(x, y, button='left', delay=0.1)
         time.sleep(0.1)
@@ -1514,22 +1530,16 @@ def main():
             y = ybase + 128 * idx + 256
             click_at(x, y, button='left', delay=0.1)
             time.sleep(0.1)
-            click_at(x, y, button='left', delay=0.1)
-            time.sleep(0.1)
         indexes = [0, 1, 2]
         for idx in indexes:
             x = xbase + 384
             y = ybase + 128 * idx + 256
             click_at(x, y, button='left', delay=0.1)
             time.sleep(0.1)
-            click_at(x, y, button='left', delay=0.1)
-            time.sleep(0.1)
         indexes = [0, 1]
         for idx in indexes:
             x = xbase + 512
             y = ybase + 128 * idx + 256
-            click_at(x, y, button='left', delay=0.1)
-            time.sleep(0.1)
             click_at(x, y, button='left', delay=0.1)
             time.sleep(0.1)
         indexes = [0, 1, 2, 3, 4, 5]
@@ -1665,22 +1675,16 @@ def main():
                 y = ybase + 128 * idx + 256
                 click_at(x, y, button='left', delay=0.1)
                 time.sleep(0.1)
-                click_at(x, y, button='left', delay=0.1)
-                time.sleep(0.1)
             indexes = [0, 1, 2]
             for idx in indexes:
                 x = xbase - 384
                 y = ybase + 128 * idx + 256
                 click_at(x, y, button='left', delay=0.1)
                 time.sleep(0.1)
-                click_at(x, y, button='left', delay=0.1)
-                time.sleep(0.1)
             indexes = [0, 1]
             for idx in indexes:
                 x = xbase - 512
                 y = ybase + 128 * idx + 256
-                click_at(x, y, button='left', delay=0.1)
-                time.sleep(0.1)
                 click_at(x, y, button='left', delay=0.1)
                 time.sleep(0.1)
             indexes = [0, 1, 2, 3, 4, 5]
@@ -1758,505 +1762,13 @@ def main():
     time.sleep(0.5)
     press_key('SPACE')
     time.sleep(0.1)
-    press_key('SPACE', press_duration=2)
+    press_key('SPACE', press_duration=5)
     time.sleep(0.5)
     press_key('SPACE', press_duration=2)
     time.sleep(0.5)
     press_key('SPACE', press_duration=2)
-    time.sleep(20)
-    if Boss == 0:
-        press_key('O')
-        time.sleep(0.5)
-        initial_positionscoll(W=0.8, S=0, A=0.5, D=0)
-    else:
-        if Boss == 1:
-            press_key('O')
-            time.sleep(0.5)
-            initial_positionscoll(W=0.8, S=0, A=0, D=2)
-        while True:
-            image_path = resource_path('zhuangyuan/0011.png')
-            result = find_image(image_path, threshold=0.7)
-            if result:
-                xinit, yinit, similarity = result
-                if 1180 < xinit < 1260 and 200 < yinit < 300:
-                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                xbase = xinit - 65
-                                ybase = yinit + 184
-                                time.sleep(0.5)
-                                press_key('6')
-                                time.sleep(0.5)
-                                indexes = [0, 1, 2, 3]
-                                for idx in indexes:
-                                    x = xbase
-                                    y = ybase + 128 * idx
-                                    click_at(x, y, button='left', delay=0.1)
-                                    time.sleep(0.1)
-                                for idx in indexes:
-                                    x = xbase + 128
-                                    y = ybase + 128 * idx
-                                    click_at(x, y, button='left', delay=0.1)
-                                    time.sleep(0.1)
-                                initial_positionscoll(W=0, S=0.2, A=0, D=2)
-                                while True:
-                                    image_path = resource_path('zhuangyuan/0095.png')
-                                    result = find_image(image_path, threshold=0.7)
-                                    if result:
-                                        xinit, yinit, similarity = result
-                                        if 980 < xinit < 1080 and 330 < yinit < 420:
-                                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                        xbase = xinit + 257
-                                                        ybase = yinit - 132
-                                                        time.sleep(0.5)
-                                                        press_key('6')
-                                                        time.sleep(0.5)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2, 3]
-                                                        for idx in indexes:
-                                                            x = xbase
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 128
-                                                            y = ybase + 128 * idx
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        indexes = [0, 1, 2]
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 256
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                                        for idx in indexes:
-                                                            x = xbase - 256 - 128 * idx
-                                                            y = ybase + 384
-                                                            click_at(x, y, button='left', delay=0.1)
-                                                            time.sleep(0.1)
-                                        initial_positionscoll(W=0, S=0.2, A=0, D=2)
-                                        time.sleep(0.5)
-                                    initial_positionscoll(W=0, S=0.2, A=0, D=2)
-                                    time.sleep(0.5)
-                initial_positionscoll(W=0.8, S=0, A=0, D=2)
-                time.sleep(0.5)
-            initial_positionscoll(W=0.8, S=0, A=0, D=2)
-            time.sleep(0.5)
-    while True:
-        image_path = resource_path('zhuangyuan/0011.png')
-        result = find_image(image_path, threshold=0.7)
-        if result:
-            xinit, yinit, similarity = result
-            if 650 < xinit < 750 and 200 < yinit < 300:
-                            print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                            xbase = xinit - 62
-                            ybase = yinit + 185
-                            time.sleep(0.5)
-                            press_key('6')
-                            time.sleep(0.5)
-                            indexes = [0, 1, 2, 3]
-                            for idx in indexes:
-                                x = xbase
-                                y = ybase + 128 * idx
-                                click_at(x, y, button='left', delay=0.1)
-                                time.sleep(0.1)
-                            for idx in indexes:
-                                x = xbase + 128
-                                y = ybase + 128 * idx
-                                click_at(x, y, button='left', delay=0.1)
-                                time.sleep(0.1)
-                            initial_positionscoll(W=0, S=0.2, A=0.5, D=0)
-                            while True:
-                                image_path = resource_path('zhuangyuan/0093.png')
-                                result = find_image(image_path, threshold=0.7)
-                                if result:
-                                    xinit, yinit, similarity = result
-                                    if 200 < xinit < 260 and 470 < yinit < 550:
-                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                    xbase = xinit + 407
-                                                    ybase = yinit - 265
-                                                    time.sleep(0.5)
-                                                    press_key('6')
-                                                    time.sleep(0.5)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2, 3]
-                                                    for idx in indexes:
-                                                        x = xbase
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 128
-                                                        y = ybase + 128 * idx
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    indexes = [0, 1, 2]
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 256
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                    for idx in indexes:
-                                                        x = xbase + 256 + 128 * idx
-                                                        y = ybase + 384
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                    initial_positionscoll(W=0, S=0.2, A=0.5, D=0)
-                                    time.sleep(0.5)
-                                initial_positionscoll(W=0, S=0.2, A=0.5, D=0)
-                                time.sleep(0.5)
-            initial_positionscoll(W=0.8, S=0, A=0.5, D=0)
-            time.sleep(0.5)
-        initial_positionscoll(W=0.8, S=0, A=0.5, D=0)
-        time.sleep(0.5)
+    time.sleep(0.5)
+    press_key('SPACE', press_duration=2)
 def run_game_cycle():
     t1 = threading.Thread(target=periodic_image_check, daemon=True)
     t1.start()

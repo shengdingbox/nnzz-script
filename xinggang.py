@@ -1,3 +1,8 @@
+# Decompiled with PyLingual (https://pylingual.io)
+# Internal filename: 'xinggang.py'
+# Bytecode version: 3.10.b1 (3439)
+# Source timestamp: 1970-01-01 00:00:00 UTC (0)
+
 global wave_counter
 global last_wave_counter
 global wave_lock
@@ -312,7 +317,7 @@ def traverse():
                 press_key('SPACE')
                 time.sleep(0.5)
             click_at(1454, 220, button='left')
-        result = find_image(resource_path('photo/buzaitixing.png'), threshold=0.75)
+        result = find_image(resource_path('photo/xgbuzaitixing.png'), threshold=0.75)
         if result:
             time.sleep(1)
             click_at(899, 598, button='left')
@@ -377,220 +382,85 @@ def main():
         if result:
             xinit, yinit, similarity = result
             if 800 < xinit < 850 and 740 < yinit < 790:
-                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                xbase = xinit + 10
-                ybase = yinit - 534
-                time.sleep(0.5)
-                press_key('7')
-                time.sleep(0.5)
-                indexes = [0, 1, 2, 3]
-                for idx in indexes:
-                    x = xbase + 43
-                    y = ybase + 85 * idx
-                    click_at(x, y, button='left', delay=0.1)
-                    time.sleep(0.1)
-                for idx in indexes:
-                    x = xbase + 43 + 170
-                    y = ybase + 85 * idx
-                    click_at(x, y, button='left', delay=0.1)
-                    time.sleep(0.1)
-                time.sleep(1)
-                wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.7)
-                with wave_lock:
-                    wave_counter += 1
-                    print(f'当前完成波次: {wave_counter}')
-                press_key('G')
-                time.sleep(0.5)
-                press_key('7', press_duration=2)
-                time.sleep(0.5)
-                indexes = [4, 5]
-                for idx in indexes:
-                    x = xbase + 43
-                    y = ybase + 85 * idx
-                    click_at(x, y, button='left', delay=0.1)
-                    time.sleep(0.2)
-                indexes = [3, 4, 5]
-                for idx in indexes:
-                    x = xbase + 43 + 170
-                    y = ybase + 85 * idx
-                    click_at(x, y, button='left', delay=0.1)
-                    time.sleep(0.1)
-                initial_position(W=0, S=0)
-                press_key('7')
-                time.sleep(0.5)
-                click_at(960, 416, button='left', delay=0.1)
-                wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
-                with wave_lock:
-                    wave_counter += 1
-                    print(f'当前完成波次: {wave_counter}')
-                press_key('G')
-                time.sleep(0.5)
-                press_key('4')
-                time.sleep(0.5)
-                click_at(277, 541, button='left', delay=0.1)
-                time.sleep(0.5)
-                click_at(1643, 541, button='left', delay=0.1)
-                while True:
-                    initial_position(W=0.6, S=0)
-                    time.sleep(0.2)
-                    image_path = resource_path('photo/xg0011.png')
-                    result = find_image(image_path, threshold=0.7)
-                    if result:
-                        xinit, yinit, similarity = result
-                        if 800 < xinit < 850 and 740 < yinit < 790:
                             print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                            press_key('6')
+                            xbase = xinit + 10
+                            ybase = yinit - 534
                             time.sleep(0.5)
-                            click_at(xinit + 132, yinit - 78, button='left', delay=0.1)
-                            time.sleep(0.5)
-                            xbase = xinit - 39
-                            ybase = yinit - 589
-                            press_key('4')
+                            press_key('7')
                             time.sleep(0.5)
                             indexes = [0, 1, 2, 3]
                             for idx in indexes:
-                                x = xbase - 43 - 85 * idx
-                                y = ybase + 43
+                                x = xbase + 43
+                                y = ybase + 85 * idx
                                 click_at(x, y, button='left', delay=0.1)
                                 time.sleep(0.1)
                             for idx in indexes:
-                                x = xbase - 43 - 85 * idx
-                                y = ybase + 43 + 85
+                                x = xbase + 43 + 170
+                                y = ybase + 85 * idx
                                 click_at(x, y, button='left', delay=0.1)
                                 time.sleep(0.1)
+                            time.sleep(1)
+                            wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.7)
+                            with wave_lock:
+                                wave_counter += 1
+                                print(f'当前完成波次: {wave_counter}')
+                            press_key('G')
+                            time.sleep(0.5)
+                            press_key('7', press_duration=2)
+                            time.sleep(0.5)
+                            indexes = [4, 5]
                             for idx in indexes:
-                                x = xbase + 340 + 43 + 85 * idx
-                                y = ybase + 43
+                                x = xbase + 43
+                                y = ybase + 85 * idx
                                 click_at(x, y, button='left', delay=0.1)
-                                time.sleep(0.1)
+                                time.sleep(0.2)
+                            indexes = [3, 4, 5]
                             for idx in indexes:
-                                x = xbase + 340 + 43 + 85 * idx
-                                y = ybase + 43 + 85
+                                x = xbase + 43 + 170
+                                y = ybase + 85 * idx
                                 click_at(x, y, button='left', delay=0.1)
                                 time.sleep(0.1)
-                            time.sleep(10)
+                            initial_position(W=0, S=0)
+                            press_key('7')
+                            time.sleep(0.5)
+                            click_at(960, 416, button='left', delay=0.1)
                             wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
                             with wave_lock:
                                 wave_counter += 1
                                 print(f'当前完成波次: {wave_counter}')
                             press_key('G')
                             time.sleep(0.5)
-                            initial_position(W=0, S=0)
-                            click_at(963, 438, button='left', delay=0.1)
+                            press_key('4')
                             time.sleep(0.5)
-                            press_key('E')
+                            click_at(277, 541, button='left', delay=0.1)
                             time.sleep(0.5)
+                            click_at(1643, 541, button='left', delay=0.1)
                             while True:
-                                initial_position(W=0, S=0.6)
-                                image_path = resource_path('photo/xg0041.png')
+                                initial_position(W=0.6, S=0)
+                                time.sleep(0.2)
+                                image_path = resource_path('photo/xg0011.png')
                                 result = find_image(image_path, threshold=0.7)
                                 if result:
                                     xinit, yinit, similarity = result
-                                    if 620 < xinit < 660 and 400 < yinit < 480:
-                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                        xbase = xinit + 58
-                                        ybase = yinit + 57
-                                        time.sleep(0.5)
-                                        press_key('5')
-                                        time.sleep(0.5)
-                                        click_at(xbase - 425, ybase - 85, button='left', delay=0.1)
-                                        time.sleep(0.5)
-                                        click_at(xbase + 510 + 425, ybase - 85, button='left', delay=0.1)
-                                        time.sleep(0.5)
-                                        press_key('7')
-                                        time.sleep(0.5)
-                                        indexes = [0, 1, 2]
-                                        for idx in indexes:
-                                            x = xbase - 43 - 85 - 85 * idx
-                                            y = ybase + 43
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.2)
-                                        for idx in indexes:
-                                            x = xbase - 43 - 85 - 85 * idx
-                                            y = ybase + 43 + 255
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.2)
-                                        for idx in indexes:
-                                            x = xbase + 510 + 43 + 85 + 85 * idx
-                                            y = ybase + 43
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.2)
-                                        for idx in indexes:
-                                            x = xbase + 510 + 43 + 85 + 85 * idx
-                                            y = ybase + 43 + 255
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.2)
-                                        press_key('6')
-                                        time.sleep(0.5)
-                                        indexes = [0, 1]
-                                        for idx in indexes:
-                                            x = xbase - 85
-                                            y = ybase + 85 + 170 * idx
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                        for idx in indexes:
-                                            x = xbase + 510 + 85
-                                            y = ybase + 85 + 170 * idx
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                            click_at(x, y, button='left', delay=0.1)
-                                            time.sleep(0.1)
-                                        time.sleep(20)
-                                        press_key('5', press_duration=2)
-                                        initial_position(W=0, S=0)
-                                        press_key('5')
-                                        time.sleep(10)
-                                        click_at(960, 200, button='left', delay=0.1)
-                                        wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
-                                        with wave_lock:
-                                            wave_counter += 1
-                                            print(f'当前完成波次: {wave_counter}')
-                                        press_key('6', press_duration=2)
-                                        time.sleep(0.5)
-                                        press_key('6', press_duration=2)
-                                        time.sleep(0.5)
-                                        press_key('7', press_duration=2)
-                                        time.sleep(0.5)
-                                        press_key('G')
-                                        time.sleep(0.2)
-                                        while True:
-                                            initial_position(W=0.6, S=0)
-                                            time.sleep(0.2)
-                                            image_path = resource_path('photo/xg0011.png')
-                                            result = find_image(image_path, threshold=0.7)
-                                            if result:
-                                                xinit, yinit, similarity = result
-                                                if 800 < xinit < 850 and 740 < yinit < 790:
-                                                    print(
-                                                        f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                    if 800 < xinit < 850 and 740 < yinit < 790:
+                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                    press_key('6')
                                                     time.sleep(0.5)
-                                                    press_key('4')
+                                                    click_at(xinit + 132, yinit - 78, button='left', delay=0.1)
                                                     time.sleep(0.5)
                                                     xbase = xinit - 39
                                                     ybase = yinit - 589
+                                                    press_key('4')
+                                                    time.sleep(0.5)
                                                     indexes = [0, 1, 2, 3]
                                                     for idx in indexes:
                                                         x = xbase - 43 - 85 * idx
                                                         y = ybase + 43
                                                         click_at(x, y, button='left', delay=0.1)
                                                         time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
                                                     for idx in indexes:
                                                         x = xbase - 43 - 85 * idx
                                                         y = ybase + 43 + 85
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
                                                         click_at(x, y, button='left', delay=0.1)
                                                         time.sleep(0.1)
                                                     for idx in indexes:
@@ -598,942 +468,632 @@ def main():
                                                         y = ybase + 43
                                                         click_at(x, y, button='left', delay=0.1)
                                                         time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
                                                     for idx in indexes:
                                                         x = xbase + 340 + 43 + 85 * idx
                                                         y = ybase + 43 + 85
                                                         click_at(x, y, button='left', delay=0.1)
                                                         time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
-                                                        click_at(x, y, button='left', delay=0.1)
-                                                        time.sleep(0.1)
+                                                    time.sleep(10)
+                                                    wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
+                                                    with wave_lock:
+                                                        wave_counter += 1
+                                                        print(f'当前完成波次: {wave_counter}')
+                                                    press_key('G')
+                                                    time.sleep(0.5)
+                                                    initial_position(W=0, S=0)
+                                                    click_at(963, 438, button='left', delay=0.1)
+                                                    time.sleep(0.5)
+                                                    press_key('E')
+                                                    time.sleep(0.5)
                                                     while True:
-                                                        initial_position(W=0, S=0.2)
-                                                        time.sleep(0.2)
-                                                        image_path = resource_path('photo/0051.png')
+                                                        initial_position(W=0, S=0.6)
+                                                        image_path = resource_path('photo/xg0041.png')
                                                         result = find_image(image_path, threshold=0.7)
                                                         if result:
                                                             xinit, yinit, similarity = result
-                                                            if 680 < xinit < 720 and 430 < yinit < 500:
-                                                                print(
-                                                                    f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                time.sleep(0.5)
-                                                                press_key('4')
-                                                                time.sleep(0.5)
-                                                                xbase = xinit + 259
-                                                                ybase = yinit - 258
-                                                                indexes = [0, 1, 2, 3, 4]
-                                                                for idx in indexes:
-                                                                    x = xbase - 680
-                                                                    y = ybase + 170 + 85 * idx
-                                                                    click_at(x, y, button='left', delay=0.1)
-                                                                    time.sleep(0.1)
-                                                                for idx in indexes:
-                                                                    x = xbase + 680
-                                                                    y = ybase + 170 + 85 * idx
-                                                                    click_at(x, y, button='left', delay=0.1)
-                                                                    time.sleep(0.1)
-                                                                while True:
-                                                                    initial_position(W=0, S=0.8)
-                                                                    press_key('A', press_duration=0.2)
-                                                                    time.sleep(0.2)
-                                                                    image_path = resource_path('photo/0052.png')
-                                                                    result = find_image(image_path, threshold=0.7)
-                                                                    if result:
-                                                                        xinit, yinit, similarity = result
-                                                                        if 980 < xinit < 1040 and 550 < yinit < 620:
-                                                                            print(
-                                                                                f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                            if 620 < xinit < 660 and 400 < yinit < 480:
+                                                                            print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                            xbase = xinit + 58
+                                                                            ybase = yinit + 57
                                                                             time.sleep(0.5)
-                                                                            press_key('4')
+                                                                            press_key('5')
                                                                             time.sleep(0.5)
-                                                                            xbase = xinit - 699
-                                                                            ybase = yinit + 125
-                                                                            indexes = [(-1), 1]
+                                                                            click_at(xbase - 425, ybase - 85, button='left', delay=0.1)
+                                                                            time.sleep(0.5)
+                                                                            click_at(xbase + 510 + 425, ybase - 85, button='left', delay=0.1)
+                                                                            time.sleep(0.5)
+                                                                            press_key('7')
+                                                                            time.sleep(0.5)
+                                                                            indexes = [0, 1, 2]
                                                                             for idx in indexes:
-                                                                                x = xbase + 43 * idx
-                                                                                y = ybase - 43
-                                                                                click_at(x, y, button='left', delay=0.1)
-                                                                                time.sleep(0.1)
-                                                                            for idx in indexes:
-                                                                                x = xbase + 43 * idx
+                                                                                x = xbase - 43 - 85 - 85 * idx
                                                                                 y = ybase + 43
                                                                                 click_at(x, y, button='left', delay=0.1)
-                                                                                time.sleep(0.1)
-                                                                            while True:
-                                                                                initial_position(W=0, S=0.8)
-                                                                                press_key('D', press_duration=0.2)
                                                                                 time.sleep(0.2)
-                                                                                image_path = resource_path(
-                                                                                    'photo/0052.png')
-                                                                                result = find_image(image_path,
-                                                                                                    threshold=0.7)
+                                                                            for idx in indexes:
+                                                                                x = xbase - 43 - 85 - 85 * idx
+                                                                                y = ybase + 43 + 255
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.2)
+                                                                            for idx in indexes:
+                                                                                x = xbase + 510 + 43 + 85 + 85 * idx
+                                                                                y = ybase + 43
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.2)
+                                                                            for idx in indexes:
+                                                                                x = xbase + 510 + 43 + 85 + 85 * idx
+                                                                                y = ybase + 43 + 255
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.2)
+                                                                            press_key('6')
+                                                                            time.sleep(0.5)
+                                                                            indexes = [0, 1]
+                                                                            for idx in indexes:
+                                                                                x = xbase - 85
+                                                                                y = ybase + 85 + 170 * idx
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.1)
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.1)
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.1)
+                                                                            for idx in indexes:
+                                                                                x = xbase + 510 + 85
+                                                                                y = ybase + 85 + 170 * idx
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.1)
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.1)
+                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                time.sleep(0.1)
+                                                                            time.sleep(20)
+                                                                            press_key('5', press_duration=2)
+                                                                            initial_position(W=0, S=0)
+                                                                            press_key('5')
+                                                                            time.sleep(10)
+                                                                            click_at(960, 200, button='left', delay=0.1)
+                                                                            wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
+                                                                            with wave_lock:
+                                                                                wave_counter += 1
+                                                                                print(f'当前完成波次: {wave_counter}')
+                                                                            press_key('6', press_duration=2)
+                                                                            time.sleep(0.5)
+                                                                            press_key('6', press_duration=2)
+                                                                            time.sleep(0.5)
+                                                                            press_key('7', press_duration=2)
+                                                                            time.sleep(0.5)
+                                                                            press_key('G')
+                                                                            time.sleep(0.2)
+                                                                            while True:
+                                                                                initial_position(W=0.6, S=0)
+                                                                                time.sleep(0.2)
+                                                                                image_path = resource_path('photo/xg0011.png')
+                                                                                result = find_image(image_path, threshold=0.7)
                                                                                 if result:
                                                                                     xinit, yinit, similarity = result
-                                                                                    if 480 < xinit < 540 and 550 < yinit < 620:
-                                                                                        print(
-                                                                                            f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                        time.sleep(0.5)
-                                                                                        press_key('4')
-                                                                                        time.sleep(0.5)
-                                                                                        xbase = xinit + 1093
-                                                                                        ybase = yinit + 125
-                                                                                        indexes = [(-1), 1]
-                                                                                        for idx in indexes:
-                                                                                            x = xbase + 43 * idx
-                                                                                            y = ybase - 43
-                                                                                            click_at(x, y,
-                                                                                                     button='left',
-                                                                                                     delay=0.1)
-                                                                                            time.sleep(0.1)
-                                                                                        for idx in indexes:
-                                                                                            x = xbase + 43 * idx
-                                                                                            y = ybase + 43
-                                                                                            click_at(x, y,
-                                                                                                     button='left',
-                                                                                                     delay=0.1)
-                                                                                            time.sleep(0.1)
-                                                                                        wait_for_image(resource_path(
-                                                                                            'photo/BOCIERWANCHENG.png'),
-                                                                                                       threshold=0.75)
-                                                                                        with wave_lock:
-                                                                                            wave_counter += 1
-                                                                                            print(
-                                                                                                f'当前完成波次: {wave_counter}')
-                                                                                        press_key('G')
-                                                                                        time.sleep(0.5)
-                                                                                        press_key('4', press_duration=2)
-                                                                                        time.sleep(0.5)
-                                                                                        press_key('5', press_duration=2)
-                                                                                        while True:
-                                                                                            initial_position(W=0, S=0.7)
-                                                                                            image_path = resource_path(
-                                                                                                'photo/xg0041.png')
-                                                                                            result = find_image(
-                                                                                                image_path,
-                                                                                                threshold=0.7)
-                                                                                            if result:
-                                                                                                xinit, yinit, similarity = result
-                                                                                                if 620 < xinit < 660 and 280 < yinit < 350:
-                                                                                                    print(
-                                                                                                        f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                    if 800 < xinit < 850 and 740 < yinit < 790:
+                                                                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
                                                                                                     time.sleep(0.5)
-                                                                                                    press_key('5')
+                                                                                                    press_key('4')
                                                                                                     time.sleep(0.5)
-                                                                                                    xbase = xinit + 58 + 255
-                                                                                                    ybase = yinit + 57
-                                                                                                    indexes = [(-1), 1]
+                                                                                                    xbase = xinit - 39
+                                                                                                    ybase = yinit - 589
+                                                                                                    indexes = [0, 1, 2, 3]
                                                                                                     for idx in indexes:
-                                                                                                        x = xbase - 510 * idx
-                                                                                                        y = ybase - 85
-                                                                                                        click_at(x, y,
-                                                                                                                 button='left',
-                                                                                                                 delay=0.1)
+                                                                                                        x = xbase - 43 - 85 * idx
+                                                                                                        y = ybase + 43
+                                                                                                        click_at(x, y, button='left', delay=0.1)
                                                                                                         time.sleep(0.1)
-                                                                                                    indexes = [0, 1]
-                                                                                                    for idx in indexes:
-                                                                                                        x = xbase - 510 - 170 * idx
-                                                                                                        y = ybase + 425
-                                                                                                        click_at(x, y,
-                                                                                                                 button='left',
-                                                                                                                 delay=0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
                                                                                                         time.sleep(0.1)
                                                                                                     for idx in indexes:
-                                                                                                        x = xbase + 510 + 170 * idx
-                                                                                                        y = ybase + 425
-                                                                                                        click_at(x, y,
-                                                                                                                 button='left',
-                                                                                                                 delay=0.1)
+                                                                                                        x = xbase - 43 - 85 * idx
+                                                                                                        y = ybase + 43 + 85
+                                                                                                        click_at(x, y, button='left', delay=0.1)
                                                                                                         time.sleep(0.1)
-                                                                                                    wait_for_image(
-                                                                                                        resource_path(
-                                                                                                            'photo/BOCIERWANCHENG.png'),
-                                                                                                        threshold=0.75)
-                                                                                                    with wave_lock:
-                                                                                                        wave_counter += 1
-                                                                                                        print(
-                                                                                                            f'当前完成波次: {wave_counter}')
-                                                                                                    press_key('G')
-                                                                                                    time.sleep(0.5)
-                                                                                                    press_key('4',
-                                                                                                              press_duration=2)
-                                                                                                    time.sleep(0.5)
-                                                                                                    press_key('5',
-                                                                                                              press_duration=2)
-                                                                                                    time.sleep(0.5)
-                                                                                                    press_key('6',
-                                                                                                              press_duration=2)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                    for idx in indexes:
+                                                                                                        x = xbase + 340 + 43 + 85 * idx
+                                                                                                        y = ybase + 43
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                    for idx in indexes:
+                                                                                                        x = xbase + 340 + 43 + 85 * idx
+                                                                                                        y = ybase + 43 + 85
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
+                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                        time.sleep(0.1)
                                                                                                     while True:
-                                                                                                        initial_position(
-                                                                                                            W=0.3, S=0)
-                                                                                                        image_path = resource_path(
-                                                                                                            'photo/xg0011.png')
-                                                                                                        result = find_image(
-                                                                                                            image_path,
-                                                                                                            threshold=0.7)
+                                                                                                        initial_position(W=0, S=0.2)
+                                                                                                        time.sleep(0.2)
+                                                                                                        image_path = resource_path('photo/0051.png')
+                                                                                                        result = find_image(image_path, threshold=0.7)
                                                                                                         if result:
                                                                                                             xinit, yinit, similarity = result
-                                                                                                            if 800 < xinit < 860 and 360 < yinit < 420:
-                                                                                                                print(
-                                                                                                                    f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                break
-                                                                                                            xbase = xinit + 132
-                                                                                                            ybase = yinit + 6
-                                                                                                            time.sleep(
-                                                                                                                0.5)
-                                                                                                            press_key(
-                                                                                                                '6')
-                                                                                                            time.sleep(
-                                                                                                                0.5)
-                                                                                                            click_at(
-                                                                                                                xbase,
-                                                                                                                ybase - 85,
-                                                                                                                button='left',
-                                                                                                                delay=0.1)
-                                                                                                            time.sleep(
-                                                                                                                0.1)
-                                                                                                            click_at(
-                                                                                                                xbase,
-                                                                                                                ybase - 85 - 10,
-                                                                                                                button='left',
-                                                                                                                delay=0.1)
-                                                                                                            time.sleep(
-                                                                                                                0.1)
-                                                                                                            click_at(
-                                                                                                                xbase,
-                                                                                                                ybase - 10,
-                                                                                                                button='right',
-                                                                                                                delay=0.1)
-                                                                                                            time.sleep(
-                                                                                                                0.5)
-                                                                                                            press_key(
-                                                                                                                '5')
-                                                                                                            time.sleep(
-                                                                                                                0.5)
-                                                                                                            indexes = [
-                                                                                                                0,
-                                                                                                                1]
-                                                                                                            for idx in indexes:
-                                                                                                                x = xbase
-                                                                                                                y = ybase + 170 + 170 * idx
-                                                                                                                click_at(
-                                                                                                                    x,
-                                                                                                                    y,
-                                                                                                                    button='left',
-                                                                                                                    delay=0.1)
-                                                                                                                time.sleep(
-                                                                                                                    0.1)
-                                                                                                            indexes = [
-                                                                                                                (
-                                                                                                                    -1),
-                                                                                                                1]
-                                                                                                            for idx in indexes:
-                                                                                                                x = xbase + 170 * idx
-                                                                                                                y = ybase + 255
-                                                                                                                click_at(
-                                                                                                                    x,
-                                                                                                                    y,
-                                                                                                                    button='left',
-                                                                                                                    delay=0.1)
-                                                                                                                time.sleep(
-                                                                                                                    0.1)
-                                                                                                            while True:
-                                                                                                                initial_position(
-                                                                                                                    W=0.6,
-                                                                                                                    S=0)
-                                                                                                                time.sleep(
-                                                                                                                    0.2)
-                                                                                                                image_path = resource_path(
-                                                                                                                    'photo/xg0011.png')
-                                                                                                                result = find_image(
-                                                                                                                    image_path,
-                                                                                                                    threshold=0.7)
-                                                                                                                if result:
-                                                                                                                    xinit, yinit, similarity = result
-                                                                                                                    if 800 < xinit < 850 and 740 < yinit < 790:
-                                                                                                                        print(
-                                                                                                                            f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                        time.sleep(
-                                                                                                                            0.5)
-                                                                                                                        press_key(
-                                                                                                                            '4')
-                                                                                                                        time.sleep(
-                                                                                                                            0.5)
-                                                                                                                        xbase = xinit - 39
-                                                                                                                        ybase = yinit - 589
-                                                                                                                        indexes = [
-                                                                                                                            0,
-                                                                                                                            1,
-                                                                                                                            2,
-                                                                                                                            3]
-                                                                                                                        for idx in indexes:
-                                                                                                                            x = xbase - 43 - 85 * idx
-                                                                                                                            y = ybase + 43
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                        for idx in indexes:
-                                                                                                                            x = xbase - 43 - 85 * idx
-                                                                                                                            y = ybase + 43 + 85
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                        for idx in indexes:
-                                                                                                                            x = xbase + 340 + 43 + 85 * idx
-                                                                                                                            y = ybase + 43
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                        for idx in indexes:
-                                                                                                                            x = xbase + 340 + 43 + 85 * idx
-                                                                                                                            y = ybase + 43 + 85
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                            click_at(
-                                                                                                                                x,
-                                                                                                                                y,
-                                                                                                                                button='left',
-                                                                                                                                delay=0.1)
-                                                                                                                            time.sleep(
-                                                                                                                                0.1)
-                                                                                                                        wait_for_image(
-                                                                                                                            resource_path(
-                                                                                                                                'photo/BOCIERWANCHENG.png'),
-                                                                                                                            threshold=0.75)
-                                                                                                                        with wave_lock:
-                                                                                                                            wave_counter += 1
-                                                                                                                            print(f'当前完成波次: {wave_counter}')
-                                                                                                                        press_key(
-                                                                                                                            'G')
-                                                                                                                        time.sleep(
-                                                                                                                            0.5)
-                                                                                                                        while True:
-                                                                                                                            initial_position(
-                                                                                                                                W=0.6,
-                                                                                                                                S=0)
-                                                                                                                            time.sleep(
-                                                                                                                                0.2)
-                                                                                                                            image_path = resource_path(
-                                                                                                                                'photo/xg0011.png')
-                                                                                                                            result = find_image(
-                                                                                                                                image_path,
-                                                                                                                                threshold=0.7)
-                                                                                                                            if result:
-                                                                                                                                xinit, yinit, similarity = result
-                                                                                                                                if 800 < xinit < 850 and 740 < yinit < 790:
-                                                                                                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                                    time.sleep(
-                                                                                                                                        0.5)
-                                                                                                                                    press_key(
-                                                                                                                                        '4')
-                                                                                                                                    time.sleep(
-                                                                                                                                        0.5)
-                                                                                                                                    xbase = xinit - 39
-                                                                                                                                    ybase = yinit - 589
-                                                                                                                                    indexes = [
-                                                                                                                                        0,
-                                                                                                                                        1,
-                                                                                                                                        2,
-                                                                                                                                        3]
-                                                                                                                                    for idx in indexes:
-                                                                                                                                        x = xbase - 43 - 85 * idx
-                                                                                                                                        y = ybase + 43
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                    for idx in indexes:
-                                                                                                                                        x = xbase - 43 - 85 * idx
-                                                                                                                                        y = ybase + 43 + 85
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                    for idx in indexes:
-                                                                                                                                        x = xbase + 340 + 43 + 85 * idx
-                                                                                                                                        y = ybase + 43
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                    for idx in indexes:
-                                                                                                                                        x = xbase + 340 + 43 + 85 * idx
-                                                                                                                                        y = ybase + 43 + 85
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                        click_at(
-                                                                                                                                            x,
-                                                                                                                                            y,
-                                                                                                                                            button='left',
-                                                                                                                                            delay=0.1)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.1)
-                                                                                                                                    while True:
-                                                                                                                                        initial_position(
-                                                                                                                                            W=0.3,
-                                                                                                                                            S=0)
-                                                                                                                                        image_path = resource_path(
-                                                                                                                                            'photo/xg0011.png')
-                                                                                                                                        result = find_image(
-                                                                                                                                            image_path,
-                                                                                                                                            threshold=0.7)
-                                                                                                                                        if result:
-                                                                                                                                            xinit, yinit, similarity = result
-                                                                                                                                            if 800 < xinit < 860 and 360 < yinit < 420:
-                                                                                                                                                print(
-                                                                                                                                                    f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                                                break
-                                                                                                                                            xbase = xinit + 132
-                                                                                                                                            ybase = yinit + 6
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                '6')
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            click_at(
-                                                                                                                                                xbase,
-                                                                                                                                                ybase - 85,
-                                                                                                                                                button='left',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.1)
-                                                                                                                                            click_at(
-                                                                                                                                                xbase,
-                                                                                                                                                ybase - 85 - 10,
-                                                                                                                                                button='left',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.1)
-                                                                                                                                            click_at(
-                                                                                                                                                xbase,
-                                                                                                                                                ybase - 10,
-                                                                                                                                                button='right',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                '5')
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            indexes = [
-                                                                                                                                                0,
-                                                                                                                                                1]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = xbase
-                                                                                                                                                y = ybase + 170 + 170 * idx
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            indexes = [
-                                                                                                                                                (
-                                                                                                                                                    -1),
-                                                                                                                                                1]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = xbase + 170 * idx
-                                                                                                                                                y = ybase + 255
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            wait_for_image(
-                                                                                                                                                resource_path(
-                                                                                                                                                    'photo/BOCIERWANCHENG.png'),
-                                                                                                                                                threshold=0.75)
-                                                                                                                                            with wave_lock:
-                                                                                                                                                wave_counter += 1
-                                                                                                                                                print(
-                                                                                                                                                    f'当前完成波次: {wave_counter}')
-                                                                                                                                            press_key(
-                                                                                                                                                'N')
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.4)
-                                                                                                                                            click_at(
-                                                                                                                                                800,
-                                                                                                                                                975,
-                                                                                                                                                button='right',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.1)
-                                                                                                                                            click_at(
-                                                                                                                                                920,
-                                                                                                                                                975,
-                                                                                                                                                button='right',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.1)
-                                                                                                                                            click_at(
-                                                                                                                                                1030,
-                                                                                                                                                975,
-                                                                                                                                                button='right',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.1)
-                                                                                                                                            click_at(
-                                                                                                                                                1140,
-                                                                                                                                                975,
-                                                                                                                                                button='right',
-                                                                                                                                                delay=0.1)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            image_path = resource_path(
-                                                                                                                                                'photo/jianmie.png')
-                                                                                                                                            result = find_image(
-                                                                                                                                                image_path,
-                                                                                                                                                threshold=0.6)
+                                                                                                            if 680 < xinit < 720 and 430 < yinit < 500:
+                                                                                                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                time.sleep(0.5)
+                                                                                                                press_key('4')
+                                                                                                                time.sleep(0.5)
+                                                                                                                xbase = xinit + 259
+                                                                                                                ybase = yinit - 258
+                                                                                                                indexes = [0, 1, 2, 3, 4]
+                                                                                                                for idx in indexes:
+                                                                                                                    x = xbase - 680
+                                                                                                                    y = ybase + 170 + 85 * idx
+                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                    time.sleep(0.1)
+                                                                                                                for idx in indexes:
+                                                                                                                    x = xbase + 680
+                                                                                                                    y = ybase + 170 + 85 * idx
+                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                    time.sleep(0.1)
+                                                                                                                while True:
+                                                                                                                    initial_position(W=0, S=0.8)
+                                                                                                                    press_key('A', press_duration=0.2)
+                                                                                                                    time.sleep(0.2)
+                                                                                                                    image_path = resource_path('photo/0052.png')
+                                                                                                                    result = find_image(image_path, threshold=0.7)
+                                                                                                                    if result:
+                                                                                                                        xinit, yinit, similarity = result
+                                                                                                                        if 980 < xinit < 1040 and 550 < yinit < 620:
+                                                                                                                            print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                            time.sleep(0.5)
+                                                                                                                            press_key('4')
+                                                                                                                            time.sleep(0.5)
+                                                                                                                            xbase = xinit - 699
+                                                                                                                            ybase = yinit + 125
+                                                                                                                            indexes = [(-1), 1]
+                                                                                                                            for idx in indexes:
+                                                                                                                                x = xbase + 43 * idx
+                                                                                                                                y = ybase - 43
+                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                time.sleep(0.1)
+                                                                                                                            for idx in indexes:
+                                                                                                                                x = xbase + 43 * idx
+                                                                                                                                y = ybase + 43
+                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                time.sleep(0.1)
+                                                                                                                            while True:
+                                                                                                                                initial_position(W=0, S=0.8)
+                                                                                                                                press_key('D', press_duration=0.2)
+                                                                                                                                time.sleep(0.2)
+                                                                                                                                image_path = resource_path('photo/0052.png')
+                                                                                                                                result = find_image(image_path, threshold=0.7)
+                                                                                                                                if result:
+                                                                                                                                    xinit, yinit, similarity = result
+                                                                                                                                    if 480 < xinit < 540 and 550 < yinit < 620:
+                                                                                                                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                        time.sleep(0.5)
+                                                                                                                                        press_key('4')
+                                                                                                                                        time.sleep(0.5)
+                                                                                                                                        xbase = xinit + 1093
+                                                                                                                                        ybase = yinit + 125
+                                                                                                                                        indexes = [(-1), 1]
+                                                                                                                                        for idx in indexes:
+                                                                                                                                            x = xbase + 43 * idx
+                                                                                                                                            y = ybase - 43
+                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                            time.sleep(0.1)
+                                                                                                                                        for idx in indexes:
+                                                                                                                                            x = xbase + 43 * idx
+                                                                                                                                            y = ybase + 43
+                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                            time.sleep(0.1)
+                                                                                                                                        wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
+                                                                                                                                        with wave_lock:
+                                                                                                                                            wave_counter += 1
+                                                                                                                                            print(f'当前完成波次: {wave_counter}')
+                                                                                                                                        press_key('G')
+                                                                                                                                        time.sleep(0.5)
+                                                                                                                                        press_key('4', press_duration=2)
+                                                                                                                                        time.sleep(0.5)
+                                                                                                                                        press_key('5', press_duration=2)
+                                                                                                                                        while True:
+                                                                                                                                            initial_position(W=0, S=0.7)
+                                                                                                                                            image_path = resource_path('photo/xg0041.png')
+                                                                                                                                            result = find_image(image_path, threshold=0.7)
                                                                                                                                             if result:
-                                                                                                                                                x, y, similarity = result
-                                                                                                                                                print(
-                                                                                                                                                    f'✅ 找到图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left')
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                'N')
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                '4',
-                                                                                                                                                press_duration=2)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                '4',
-                                                                                                                                                press_duration=2)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                '4',
-                                                                                                                                                press_duration=2)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            initial_positionscoll(
-                                                                                                                                                W=2.5,
-                                                                                                                                                S=0)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            press_key(
-                                                                                                                                                '4')
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                            indexes = [
-                                                                                                                                                (
-                                                                                                                                                    -2),
-                                                                                                                                                (
-                                                                                                                                                    -1),
-                                                                                                                                                0,
-                                                                                                                                                1,
-                                                                                                                                                2]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 933 - 85 * idx
-                                                                                                                                                y = 181
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            indexes = [
-                                                                                                                                                0,
-                                                                                                                                                1,
-                                                                                                                                                2,
-                                                                                                                                                3,
-                                                                                                                                                4]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 763
-                                                                                                                                                y = 266 + 85 * idx
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 1103
-                                                                                                                                                y = 266 + 85 * idx
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            indexes = [
-                                                                                                                                                0,
-                                                                                                                                                1,
-                                                                                                                                                2,
-                                                                                                                                                3]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 933
-                                                                                                                                                y = 563 + 85 * idx
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            indexes = [
-                                                                                                                                                0,
-                                                                                                                                                1]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 804 - 85 * idx
-                                                                                                                                                y = 691
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 1062 + 85 * idx
-                                                                                                                                                y = 691
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            indexes = [
-                                                                                                                                                (
-                                                                                                                                                    -1),
-                                                                                                                                                1]
-                                                                                                                                            for idx in indexes:
-                                                                                                                                                x = 933 + 85 * idx
-                                                                                                                                                y = 563
-                                                                                                                                                click_at(
-                                                                                                                                                    x,
-                                                                                                                                                    y,
-                                                                                                                                                    button='left',
-                                                                                                                                                    delay=0.1)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.1)
-                                                                                                                                            while True:
-                                                                                                                                                initial_positionscoll(
-                                                                                                                                                    W=0,
-                                                                                                                                                    S=0.4)
-                                                                                                                                                image_path = resource_path(
-                                                                                                                                                    'photo/0091.png')
-                                                                                                                                                result = find_image(
-                                                                                                                                                    image_path,
-                                                                                                                                                    threshold=0.7)
-                                                                                                                                                if result:
-                                                                                                                                                    xinit, yinit, similarity = result
-                                                                                                                                                    if 780 < xinit < 830 and 350 < yinit < 420:
-                                                                                                                                                        print(
-                                                                                                                                                            f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
-                                                                                                                                                        press_key(
-                                                                                                                                                            '4')
-                                                                                                                                                        time.sleep(
-                                                                                                                                                            0.5)
-                                                                                                                                                        xbase = xinit + 129
-                                                                                                                                                        ybase = yinit - 220
-                                                                                                                                                        indexes = [
-                                                                                                                                                            0,
-                                                                                                                                                            1,
-                                                                                                                                                            2,
-                                                                                                                                                            3,
-                                                                                                                                                            4]
-                                                                                                                                                        for idx in indexes:
-                                                                                                                                                            x = xbase + 85 + 85 * idx
-                                                                                                                                                            y = ybase
-                                                                                                                                                            click_at(
-                                                                                                                                                                x,
-                                                                                                                                                                y,
-                                                                                                                                                                button='left',
-                                                                                                                                                                delay=0.1)
-                                                                                                                                                            time.sleep(
-                                                                                                                                                                0.1)
-                                                                                                                                                        for idx in indexes:
-                                                                                                                                                            x = xbase + 425
-                                                                                                                                                            y = ybase + 85 + 85 * idx
-                                                                                                                                                            click_at(
-                                                                                                                                                                x,
-                                                                                                                                                                y,
-                                                                                                                                                                button='left',
-                                                                                                                                                                delay=0.1)
-                                                                                                                                                            time.sleep(
-                                                                                                                                                                0.1)
-                                                                                                                                                        indexes = [
-                                                                                                                                                            0,
-                                                                                                                                                            1,
-                                                                                                                                                            2,
-                                                                                                                                                            3,
-                                                                                                                                                            4,
-                                                                                                                                                            5,
-                                                                                                                                                            6]
-                                                                                                                                                        for idx in indexes:
-                                                                                                                                                            x = xbase + 680 + 42 - 85 * idx
-                                                                                                                                                            y = ybase + 510
-                                                                                                                                                            click_at(
-                                                                                                                                                                x,
-                                                                                                                                                                y,
-                                                                                                                                                                button='left',
-                                                                                                                                                                delay=0.1)
-                                                                                                                                                            time.sleep(
-                                                                                                                                                                0.1)
-                                                                                                                                                        for idx in indexes:
-                                                                                                                                                            x = xbase + 680 + 42 - 85 * idx
-                                                                                                                                                            y = ybase + 510 + 85
-                                                                                                                                                            click_at(
-                                                                                                                                                                x,
-                                                                                                                                                                y,
-                                                                                                                                                                button='left',
-                                                                                                                                                                delay=0.1)
-                                                                                                                                                            time.sleep(
-                                                                                                                                                                0.1)
-                                                                                                                                                        click_at(
-                                                                                                                                                            1383,
-                                                                                                                                                            872,
-                                                                                                                                                            button='left',
-                                                                                                                                                            delay=0.1)
-                                                                                                                                                        indexes = [
-                                                                                                                                                            0,
-                                                                                                                                                            1]
-                                                                                                                                                        for idx in indexes:
-                                                                                                                                                            x = xbase + 340 - 85 * idx
-                                                                                                                                                            y = ybase + 425
-                                                                                                                                                            click_at(
-                                                                                                                                                                x,
-                                                                                                                                                                y,
-                                                                                                                                                                button='left',
-                                                                                                                                                                delay=0.1)
-                                                                                                                                                            time.sleep(
-                                                                                                                                                                0.1)
-                                                                                                                                                        for idx in indexes:
-                                                                                                                                                            x = xbase + 340 - 85 * idx
-                                                                                                                                                            y = ybase + 680
-                                                                                                                                                            click_at(
-                                                                                                                                                                x,
-                                                                                                                                                                y,
-                                                                                                                                                                button='left',
-                                                                                                                                                                delay=0.1)
-                                                                                                                                                            time.sleep(
-                                                                                                                                                                0.1)
-                                                                                                                                                        press_key(
-                                                                                                                                                            'G')
-                                                                                                                                                        time.sleep(
-                                                                                                                                                            0.5)
-                                                                                                                                                        press_key(
-                                                                                                                                                            'SPACE')
-                                                                                                                                                        time.sleep(
-                                                                                                                                                            0.1)
-                                                                                                                                                        press_key(
-                                                                                                                                                            'SPACE',
-                                                                                                                                                            press_duration=5)
-                                                                                                                                                        time.sleep(
-                                                                                                                                                            0.5)
-                                                                                                                                                        press_key(
-                                                                                                                                                            'SPACE',
-                                                                                                                                                            press_duration=2)
-                                                                                                                                                        time.sleep(
-                                                                                                                                                            0.5)
-                                                                                                                                                        press_key(
-                                                                                                                                                            'SPACE',
-                                                                                                                                                            press_duration=2)
-                                                                                                                                                        time.sleep(
-                                                                                                                                                            0.5)
-                                                                                                                                                        press_key(
-                                                                                                                                                            'SPACE',
-                                                                                                                                                            press_duration=2)
-                                                                                                                                                    time.sleep(
-                                                                                                                                                        0.5)
-                                                                                                                                                time.sleep(
-                                                                                                                                                    0.5)
-                                                                                                                                            time.sleep(
-                                                                                                                                                0.5)
-                                                                                                                                        time.sleep(
-                                                                                                                                            0.5)
-                                                                                                                                time.sleep(
-                                                                                                                                    0.5)
-                                                                                                                                continue
-                                                                                                                            else:
-                                                                                                                                time.sleep(
-                                                                                                                                    0.5)
-                                                                                                                    time.sleep(
-                                                                                                                        0.5)
-                                                                                                                    continue
-                                                                                                                else:
-                                                                                                                    time.sleep(
-                                                                                                                        0.5)
-                                                                                                            time.sleep(
-                                                                                                                0.5)
-                                                                                                        time.sleep(0.5)
-                                                                                                time.sleep(0.5)
-                                                                                                continue
-                                                                                            else:
-                                                                                                time.sleep(0.5)
+                                                                                                                                                xinit, yinit, similarity = result
+                                                                                                                                                if 620 < xinit < 660 and 280 < yinit < 350:
+                                                                                                                                                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                press_key('5')
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                xbase = xinit + 58 + 255
+                                                                                                                                                                ybase = yinit + 57
+                                                                                                                                                                indexes = [(-1), 1]
+                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                    x = xbase - 510 * idx
+                                                                                                                                                                    y = ybase - 85
+                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                indexes = [0, 1]
+                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                    x = xbase - 510 - 170 * idx
+                                                                                                                                                                    y = ybase + 425
+                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                    x = xbase + 510 + 170 * idx
+                                                                                                                                                                    y = ybase + 425
+                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
+                                                                                                                                                                with wave_lock:
+                                                                                                                                                                    wave_counter += 1
+                                                                                                                                                                    print(f'当前完成波次: {wave_counter}')
+                                                                                                                                                                press_key('G')
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                press_key('4', press_duration=2)
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                press_key('5', press_duration=2)
+                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                press_key('6', press_duration=2)
+                                                                                                                                                                while True:
+                                                                                                                                                                    initial_position(W=0.3, S=0)
+                                                                                                                                                                    image_path = resource_path('photo/xg0011.png')
+                                                                                                                                                                    result = find_image(image_path, threshold=0.7)
+                                                                                                                                                                    if result:
+                                                                                                                                                                        xinit, yinit, similarity = result
+                                                                                                                                                                        if 800 < xinit < 860 and 360 < yinit < 420:
+                                                                                                                                                                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                        
+                                                                                                                                                                                        xbase = xinit + 132
+                                                                                                                                                                                        ybase = yinit + 6
+                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                        press_key('6')
+                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                        click_at(xbase, ybase - 85, button='left', delay=0.1)
+                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                        click_at(xbase, ybase - 85 - 10, button='left', delay=0.1)
+                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                        click_at(xbase, ybase - 10, button='right', delay=0.1)
+                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                        press_key('5')
+                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                        indexes = [0, 1]
+                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                            x = xbase
+                                                                                                                                                                                            y = ybase + 170 + 170 * idx
+                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                        indexes = [(-1), 1]
+                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                            x = xbase + 170 * idx
+                                                                                                                                                                                            y = ybase + 255
+                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                        while True:
+                                                                                                                                                                                            initial_position(W=0.6, S=0)
+                                                                                                                                                                                            time.sleep(0.2)
+                                                                                                                                                                                            image_path = resource_path('photo/xg0011.png')
+                                                                                                                                                                                            result = find_image(image_path, threshold=0.7)
+                                                                                                                                                                                            if result:
+                                                                                                                                                                                                xinit, yinit, similarity = result
+                                                                                                                                                                                                if 800 < xinit < 850 and 740 < yinit < 790:
+                                                                                                                                                                                                                print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                press_key('4')
+                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                xbase = xinit - 39
+                                                                                                                                                                                                                ybase = yinit - 589
+                                                                                                                                                                                                                indexes = [0, 1, 2, 3]
+                                                                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                                                                    x = xbase - 43 - 85 * idx
+                                                                                                                                                                                                                    y = ybase + 43
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                                                                    x = xbase - 43 - 85 * idx
+                                                                                                                                                                                                                    y = ybase + 43 + 85
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                                                                    x = xbase + 340 + 43 + 85 * idx
+                                                                                                                                                                                                                    y = ybase + 43
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                for idx in indexes:
+                                                                                                                                                                                                                    x = xbase + 340 + 43 + 85 * idx
+                                                                                                                                                                                                                    y = ybase + 43 + 85
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                    click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
+                                                                                                                                                                                                                with wave_lock:
+                                                                                                                                                                                                                    wave_counter += 1
+                                                                                                                                                                                                                    print(f'当前完成波次: {wave_counter}')
+                                                                                                                                                                                                                press_key('G')
+                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                while True:
+                                                                                                                                                                                                                    initial_position(W=0.6, S=0)
+                                                                                                                                                                                                                    time.sleep(0.2)
+                                                                                                                                                                                                                    image_path = resource_path('photo/xg0011.png')
+                                                                                                                                                                                                                    result = find_image(image_path, threshold=0.7)
+                                                                                                                                                                                                                    if result:
+                                                                                                                                                                                                                        xinit, yinit, similarity = result
+                                                                                                                                                                                                                        if 800 < xinit < 850 and 740 < yinit < 790:
+                                                                                                                                                                                                                            print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                                                            time.sleep(0.5)
+                                                                                                                                                                                                                            press_key('4')
+                                                                                                                                                                                                                            time.sleep(0.5)
+                                                                                                                                                                                                                            xbase = xinit - 39
+                                                                                                                                                                                                                            ybase = yinit - 589
+                                                                                                                                                                                                                            indexes = [0, 1, 2, 3]
+                                                                                                                                                                                                                            for idx in indexes:
+                                                                                                                                                                                                                                x = xbase - 43 - 85 * idx
+                                                                                                                                                                                                                                y = ybase + 43
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                            for idx in indexes:
+                                                                                                                                                                                                                                x = xbase - 43 - 85 * idx
+                                                                                                                                                                                                                                y = ybase + 43 + 85
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                            for idx in indexes:
+                                                                                                                                                                                                                                x = xbase + 340 + 43 + 85 * idx
+                                                                                                                                                                                                                                y = ybase + 43
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                            for idx in indexes:
+                                                                                                                                                                                                                                x = xbase + 340 + 43 + 85 * idx
+                                                                                                                                                                                                                                y = ybase + 43 + 85
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                                click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                time.sleep(0.1)
+                                                                                                                                                                                                                            while True:
+                                                                                                                                                                                                                                initial_position(W=0.3, S=0)
+                                                                                                                                                                                                                                image_path = resource_path('photo/xg0011.png')
+                                                                                                                                                                                                                                result = find_image(image_path, threshold=0.7)
+                                                                                                                                                                                                                                if result:
+                                                                                                                                                                                                                                    xinit, yinit, similarity = result
+                                                                                                                                                                                                                                    if 800 < xinit < 860 and 360 < yinit < 420:
+                                                                                                                                                                                                                                        print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                                                                        xbase = xinit + 132
+                                                                                                                                                                                                                                        ybase = yinit + 6
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('6')
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        click_at(xbase, ybase - 85, button='left', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                        click_at(xbase, ybase - 85 - 10, button='left', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                        click_at(xbase, ybase - 10, button='right', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('5')
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        indexes = [0, 1]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = xbase
+                                                                                                                                                                                                                                            y = ybase + 170 + 170 * idx
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        indexes = [(-1), 1]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = xbase + 170 * idx
+                                                                                                                                                                                                                                            y = ybase + 255
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        wait_for_image(resource_path('photo/BOCIERWANCHENG.png'), threshold=0.75)
+                                                                                                                                                                                                                                        with wave_lock:
+                                                                                                                                                                                                                                            wave_counter += 1
+                                                                                                                                                                                                                                            print(f'当前完成波次: {wave_counter}')
+                                                                                                                                                                                                                                        press_key('N')
+                                                                                                                                                                                                                                        time.sleep(0.4)
+                                                                                                                                                                                                                                        click_at(800, 975, button='right', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                        click_at(920, 975, button='right', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                        click_at(1030, 975, button='right', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                        click_at(1140, 975, button='right', delay=0.1)
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        image_path = resource_path('photo/jianmie.png')
+                                                                                                                                                                                                                                        result = find_image(image_path, threshold=0.6)
+                                                                                                                                                                                                                                        if result:
+                                                                                                                                                                                                                                            x, y, similarity = result
+                                                                                                                                                                                                                                            print(f'✅ 找到图片！坐标: ({x}, {y}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                                                                            click_at(x, y, button='left')
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('N')
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('4', press_duration=2)
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('4', press_duration=2)
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('4', press_duration=2)
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        initial_positionscoll(W=2.5, S=0)
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        press_key('4')
+                                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                                        indexes = [(-2), (-1), 0, 1, 2]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 933 - 85 * idx
+                                                                                                                                                                                                                                            y = 181
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        indexes = [0, 1, 2, 3, 4]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 763
+                                                                                                                                                                                                                                            y = 266 + 85 * idx
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 1103
+                                                                                                                                                                                                                                            y = 266 + 85 * idx
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        indexes = [0, 1, 2, 3]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 933
+                                                                                                                                                                                                                                            y = 563 + 85 * idx
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        indexes = [0, 1]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 804 - 85 * idx
+                                                                                                                                                                                                                                            y = 691
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 1062 + 85 * idx
+                                                                                                                                                                                                                                            y = 691
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        indexes = [(-1), 1]
+                                                                                                                                                                                                                                        for idx in indexes:
+                                                                                                                                                                                                                                            x = 933 + 85 * idx
+                                                                                                                                                                                                                                            y = 563
+                                                                                                                                                                                                                                            click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                            time.sleep(0.1)
+                                                                                                                                                                                                                                        while True:
+                                                                                                                                                                                                                                            initial_positionscoll(W=0, S=0.4)
+                                                                                                                                                                                                                                            image_path = resource_path('photo/xg0091.png')
+                                                                                                                                                                                                                                            result = find_image(image_path, threshold=0.7)
+                                                                                                                                                                                                                                            if result:
+                                                                                                                                                                                                                                                xinit, yinit, similarity = result
+                                                                                                                                                                                                                                                if 780 < xinit < 830 and 350 < yinit < 420:
+                                                                                                                                                                                                                                                    print(f'✅ 找到图片！坐标: ({xinit}, {yinit}), 相似度: {similarity:.3f}')
+                                                                                                                                                                                                                                                    press_key('4')
+                                                                                                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                                                                                                                    xbase = xinit + 129
+                                                                                                                                                                                                                                                    ybase = yinit - 220
+                                                                                                                                                                                                                                                    indexes = [0, 1, 2, 3, 4]
+                                                                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                                                        x = xbase + 85 + 85 * idx
+                                                                                                                                                                                                                                                        y = ybase
+                                                                                                                                                                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                                                        x = xbase + 425
+                                                                                                                                                                                                                                                        y = ybase + 85 + 85 * idx
+                                                                                                                                                                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                                    indexes = [0, 1, 2, 3, 4, 5, 6]
+                                                                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                                                        x = xbase + 680 + 42 - 85 * idx
+                                                                                                                                                                                                                                                        y = ybase + 510
+                                                                                                                                                                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                                                        x = xbase + 680 + 42 - 85 * idx
+                                                                                                                                                                                                                                                        y = ybase + 510 + 85
+                                                                                                                                                                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                                    click_at(1383, 872, button='left', delay=0.1)
+                                                                                                                                                                                                                                                    indexes = [0, 1]
+                                                                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                                                        x = xbase + 340 - 85 * idx
+                                                                                                                                                                                                                                                        y = ybase + 425
+                                                                                                                                                                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                                    for idx in indexes:
+                                                                                                                                                                                                                                                        x = xbase + 340 - 85 * idx
+                                                                                                                                                                                                                                                        y = ybase + 680
+                                                                                                                                                                                                                                                        click_at(x, y, button='left', delay=0.1)
+                                                                                                                                                                                                                                                        time.sleep(0.1)
+                                                                                                                                                                                                                                                    press_key('G')
+                                                                                                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                                                                                                                    press_key('SPACE')
+                                                                                                                                                                                                                                                    time.sleep(0.1)
+                                                                                                                                                                                                                                                    press_key('SPACE', press_duration=5)
+                                                                                                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                                                                                                                    press_key('SPACE', press_duration=2)
+                                                                                                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                                                                                                                    press_key('SPACE', press_duration=2)
+                                                                                                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                                                                                                                    press_key('SPACE', press_duration=2)
+                                                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                                            time.sleep(0.5)
+                                                                                                                                                                                                                                    #803
+                                                                                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                                        #753
+                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                                        continue
+                                                                                                                                                                                                                    else:
+                                                                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                                                continue
+                                                                                                                                                                                            else:
+                                                                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                                        time.sleep(0.5)
+                                                                                                                                                                    time.sleep(0.5)
+                                                                                                                                                time.sleep(0.5)
+                                                                                                                                                continue
+                                                                                                                                            else:
+                                                                                                                                                time.sleep(0.5)
+                                                                                                                                    #587
+                                                                                                                                    time.sleep(0.5)
+                                                                                                                                    continue
+                                                                                                                                else:
+                                                                                                                                    time.sleep(0.5)
+                                                                                                                        # 561
+                                                                                                                        time.sleep(0.5)
+                                                                                                                        continue
+                                                                                                                    else:
+                                                                                                                        time.sleep(0.5)
+                                                                                                            #535
+                                                                                                            time.sleep(0.5)
+                                                                                                            continue
+                                                                                                        else:
+                                                                                                            time.sleep(0.5)
                                                                                     time.sleep(0.5)
                                                                                     continue
                                                                                 else:
                                                                                     time.sleep(0.5)
-                                                                        time.sleep(0.5)
-                                                                        continue
-                                                                    else:
-                                                                        time.sleep(0.5)
                                                             time.sleep(0.5)
                                                             continue
                                                         else:
                                                             time.sleep(0.5)
-                                                time.sleep(0.5)
-                                                continue
-                                            else:
-                                                time.sleep(0.5)
                                     time.sleep(0.5)
                                     continue
                                 else:
                                     time.sleep(0.5)
-                        time.sleep(0.5)
-                        continue
-                    else:
-                        time.sleep(0.5)
             initial_position(W=0.6, S=0)
             time.sleep(0.5)
         initial_position(W=0.6, S=0)
@@ -1557,7 +1117,7 @@ def run_game_cycle():
         time.sleep(0.5)
         click_at(1688, 954, button='left')
         time.sleep(0.5)
-        result = find_image(resource_path('photo/buzaitixing.png'), threshold=0.75)
+        result = find_image(resource_path('photo/xgbuzaitixing.png'), threshold=0.75)
         if result:
             time.sleep(1)
             click_at(899, 598, button='left')
