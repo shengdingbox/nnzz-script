@@ -401,6 +401,8 @@ def start_script(license_valid, map_name):
         logger.warning('请先选择地图！')
         messagebox.showinfo('提示', '请先选择地图！')
         return
+    messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name},3秒后启动')
+    time.sleep(3)
 
     try:
         if map_name == '联盟大厦S2':
@@ -410,14 +412,14 @@ def start_script(license_valid, map_name):
             t = threading.Thread(target=dasha.run_game_cycle, daemon=True)
             t.start()
             logger.success(f'塔防脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+            # messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
         elif map_name == '星港20号S2':
             import xinggang
             import threading
             t = threading.Thread(target=xinggang.run_game_cycle, daemon=True)
             t.start()
             logger.success(f'塔防脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
+            # messagebox.showinfo('成功', f'塔防脚本启动成功！地图：{map_name}')
         # elif map_name == '联盟大厦KM':
         #     import tafangrunningkm
         #     tafangrunningkm.set_logger(logger)
@@ -434,7 +436,7 @@ def start_script(license_valid, map_name):
             t = threading.Thread(target=zhuangyuanjm.run_game_cycle, daemon=True)
             t.start()
             logger.success(f'塔防z脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
+            # messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
         elif map_name == '蔷薇庄园天启S2':
             import  zhuangyuantq
             zhuangyuantq.set_logger(logger)
@@ -442,7 +444,7 @@ def start_script(license_valid, map_name):
             t = threading.Thread(target=zhuangyuantq.run_game_cycle, daemon=True)
             t.start()
             logger.success(f'塔防脚本启动成功！地图：{map_name}')
-            messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
+            # messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
         else:
             logger.warning('未知的地图选择！')
             messagebox.showinfo('提示', '未知的地图选择！')
