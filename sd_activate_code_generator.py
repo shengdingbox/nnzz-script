@@ -7,21 +7,11 @@ ACTIVATE_CODE_EXPIRE_MINUTES = 30
 SUPPORT_DAYS = {'3小时': 0.125, '1天': 1, '3天': 3, '7天': 7, '30天': 30}
 DATE_FORMAT = '%Y%m%d'
 
-def get_today_hash():
-    """生成当天日期的哈希值"""
-    today_raw = datetime.now().strftime(DATE_FORMAT)
-    return hashlib.sha256(today_raw.encode()).hexdigest()[:16].upper()
 
-def get_time_token():
-    """生成时间令牌"""
-    now = datetime.now()
-    return now.strftime('%Y%m%d%H') + f'{now.minute // ACTIVATE_CODE_EXPIRE_MINUTES}'
 
 def make_activate_code(hwid, days):
     """生成激活码"""
-    today_hash = get_today_hash()
-    time_token = get_time_token()
-    raw_str = f'{today_hash}|{hwid}|{days}|{time_token}|{SECRET_KEY}'
+    raw_str = f'{hwid}|{days}|{SECRET_KEY}'
     return hashlib.sha256(raw_str.encode()).hexdigest()[:16].upper()
 
 def main():

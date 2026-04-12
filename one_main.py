@@ -407,7 +407,6 @@ def start_script(license_valid, map_name):
     try:
         if map_name == '联盟大厦S2':
             import dasha
-            dasha.set_logger(logger)
             import threading
             t = threading.Thread(target=dasha.run_game_cycle, daemon=True)
             t.start()
@@ -431,7 +430,6 @@ def start_script(license_valid, map_name):
         #     messagebox.showinfo('成功', f'塔防脚本tafangrunningkm启动成功！地图：{map_name}，帧率：{fps}')
         elif map_name == '蔷薇庄园歼灭者S2':
             import  zhuangyuanjm
-            zhuangyuanjm.set_logger(logger)
             import threading
             t = threading.Thread(target=zhuangyuanjm.run_game_cycle, daemon=True)
             t.start()
@@ -439,7 +437,6 @@ def start_script(license_valid, map_name):
             # messagebox.showinfo('成功', f'塔防脚本z启动成功！地图：{map_name}')
         elif map_name == '蔷薇庄园天启S2':
             import  zhuangyuantq
-            zhuangyuantq.set_logger(logger)
             import threading
             t = threading.Thread(target=zhuangyuantq.run_game_cycle, daemon=True)
             t.start()
