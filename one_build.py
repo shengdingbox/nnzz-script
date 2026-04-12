@@ -176,7 +176,7 @@ class ElectronBuilder:
             f"--include-data-dir=xinggang=xinggang",
             f"--include-data-dir=zhuangyuan=zhuangyuan",
             f"--onefile-tempdir-spec={temp_dir}",
-            "--windows-disable-console",  # Windows下隐藏控制台（可选）
+            # "--windows-disable-console",  # Windows下隐藏控制台（可选）
             "--windows-company-name=shengdingit",
             "--windows-product-name=nizhanscript",
             "--windows-file-version=1.0.0",
