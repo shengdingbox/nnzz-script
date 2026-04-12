@@ -241,21 +241,21 @@ def main():
     title_label = ttk.Label(title_frame, text='🎮 逆战未来塔防盛鼎脚本', font=('Microsoft YaHei UI', 18, 'bold'))
     title_label.pack(side=tk.LEFT, padx=5)
 
-    # 创建双栏容器
-    columns_frame = ttk.Frame(main_frame)
-    columns_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
+    # 主框架（单栏布局）
+    content_frame = ttk.Frame(main_frame)
+    content_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 15))
 
-    # 左栏
-    left_column = ttk.Frame(columns_frame)
-    left_column.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(0, 10))
+    # 状态区域（顶部）
+    status_frame = ttk.Frame(content_frame)
+    status_frame.pack(fill=tk.X, pady=(0, 15))
 
-    # 右栏
-    right_column = ttk.Frame(columns_frame, width=450)
-    right_column.pack(side=tk.LEFT, fill=tk.BOTH, expand=False, padx=(10, 0))
-    right_column.pack_propagate(False)
+    status_text = '❌ 未激活 | 请输入激活码' if not license_valid else '✅ 已激活 | 到期：' + license_data["expire_time"]
+    status_color = error_color if not license_valid else success_color
+    status_label = ttk.Label(status_frame, text=status_text, font=('Microsoft YaHei UI', 12, 'bold'))
+    status_label.pack(anchor=tk.W)
 
-    # 公告区域（左栏）
-    announcement_frame = ttk.LabelFrame(left_column, text='📢 公告', padding='10')
+    # 公告区域
+    announcement_frame = ttk.LabelFrame(content_frame, text='📢 公告', padding='10')
     announcement_frame.pack(fill=tk.X, pady=(0, 15))
 
     announcement_texts = [
@@ -269,8 +269,8 @@ def main():
     for text in announcement_texts:
         ttk.Label(announcement_frame, text=text, font=('Microsoft YaHei UI', 9)).pack(anchor=tk.W, pady=2)
 
-    # 机器码和激活码区域（左栏）
-    activation_frame = ttk.LabelFrame(left_column, text='🔑 激活中心', padding='10')
+    # 机器码和激活码区域
+    activation_frame = ttk.LabelFrame(content_frame, text='🔑 激活中心', padding='10')
     activation_frame.pack(fill=tk.X, pady=(0, 15))
 
     activation_grid = ttk.Frame(activation_frame)
@@ -289,17 +289,8 @@ def main():
     activate_btn = ttk.Button(activation_grid, text='✅ 立即激活', command=lambda: activate_code(activate_code_var.get(), hwid, root))
     activate_btn.grid(row=1, column=2, padx=10, pady=8)
 
-    # 状态区域（右栏栏首）
-    status_frame = ttk.Frame(right_column)
-    status_frame.pack(fill=tk.X, pady=(0, 15))
-
-    status_text = '❌ 未激活 | 请输入激活码' if not license_valid else '✅ 已激活 | 到期：' + license_data["expire_time"]
-    status_color = error_color if not license_valid else success_color
-    status_label = ttk.Label(status_frame, text=status_text, font=('Microsoft YaHei UI', 12, 'bold'))
-    status_label.pack(anchor=tk.W)
-
-    # 地图选择区域（右栏）
-    map_frame = ttk.LabelFrame(right_column, text='🗺️ 地图选择', padding='10')
+    # 地图选择区域
+    map_frame = ttk.LabelFrame(content_frame, text='🗺️ 地图选择', padding='10')
     map_frame.pack(fill=tk.X, pady=(0, 15))
 
     map_grid = ttk.Frame(map_frame)
@@ -310,8 +301,8 @@ def main():
     map_combobox = ttk.Combobox(map_grid, textvariable=map_var, values=['请选择地图','联盟大厦S2', '星港20号S2', '蔷薇庄园歼灭者S2','蔷薇庄园天启S2'], state='readonly', width=18)
     map_combobox.pack(side=tk.LEFT, padx=5)
 
-    # 功能按钮区域（右栏）
-    button_frame = ttk.Frame(right_column)
+    # 功能按钮区域
+    button_frame = ttk.Frame(content_frame)
     button_frame.pack(fill=tk.X, pady=(0, 15))
 
     # 启动按钮
@@ -324,65 +315,29 @@ def main():
     stop_button.pack(side=tk.LEFT, padx=8, pady=5)
     stop_button.state(['disabled'] if not license_valid else [])
 
-    # 日志输出区域（右栏）
-    log_frame = ttk.LabelFrame(right_column, text='📋 运行日志', padding='10')
-    log_frame.pack(fill=tk.BOTH, expand=True, pady=(15, 0))
-
-    # 创建文本框用于显示日志
-    log_text = tk.Text(log_frame, height=40, wrap=tk.WORD, bg='#34495e', fg='#ecf0f1', font=('Consolas', 9), insertbackground='#ecf0f1')
-    log_text.pack(fill=tk.BOTH, expand=True)
-
-    # 添加滚动条
-    scrollbar = ttk.Scrollbar(log_text, orient=tk.VERTICAL, command=log_text.yview)
-    scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-    log_text.config(yscrollcommand=scrollbar.set)
-
-    # 定义日志类
+    # 简单日志类（只打印到控制台，不记录到GUI）
     class Logger:
-        def __init__(self, text_widget):
-            self.text_widget = text_widget
-            self.text_widget.tag_config('info', foreground='#3498db')
-            self.text_widget.tag_config('error', foreground='#e74c3c')
-            self.text_widget.tag_config('warning', foreground='#f39c12')
-            self.text_widget.tag_config('success', foreground='#27ae60')
-            self.text_widget.tag_config('timestamp', foreground='#95a5a6')
+        def __init__(self):
+            pass
 
-        def log(self, message, tag=None):
-            """输出日志信息"""
+        def log(self, message):
             print(message)
-            from datetime import datetime
-            timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            log_message = f"[{timestamp}] {message}\n"
-
-            if tag:
-                self.text_widget.insert(tk.END, log_message, tag)
-            else:
-                self.text_widget.insert(tk.END, log_message)
-            self.text_widget.see(tk.END)
 
         def info(self, message):
-            """输出信息日志"""
-            print(message)
-            self.log(f"ℹ️ INFO: {message}", 'info')
+            print(f"ℹ️ INFO: {message}")
 
         def error(self, message):
-            """输出错误日志"""
-            print(message)
-            self.log(f"❌ ERROR: {message}", 'error')
+            print(f"❌ ERROR: {message}")
 
         def warning(self, message):
-            """输出警告日志"""
-            print(message)
-            self.log(f"⚠️ WARNING: {message}", 'warning')
+            print(f"⚠️ WARNING: {message}")
 
         def success(self, message):
-            """输出成功日志"""
-            print(message)
-            self.log(f"✅ SUCCESS: {message}", 'success')
+            print(f"✅ SUCCESS: {message}")
 
     # 创建日志实例
     global logger
-    logger = Logger(log_text)
+    logger = Logger()
 
     # 启动授权监控线程
     if license_valid:
